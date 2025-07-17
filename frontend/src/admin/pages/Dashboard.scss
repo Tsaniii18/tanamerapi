@@ -1,0 +1,280 @@
+.dashboard-page {
+  .welcome-card {
+    background: linear-gradient(135deg, #708A58 0%, #2D4F2B 100%);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    
+    .welcome-message {
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      
+      p {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+    }
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    
+    .stat-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      
+      .stat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background-color: rgba(112, 138, 88, 0.1);
+        border-radius: 50%;
+        margin-bottom: 1rem;
+        color: #708A58;
+      }
+      
+      .stat-info {
+        margin-bottom: 1.5rem;
+        
+        h3 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #555;
+          margin-bottom: 0.5rem;
+        }
+        
+        p {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #2D4F2B;
+          margin: 0;
+        }
+      }
+      
+      .stat-action {
+        margin-top: auto;
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #f5f5f5;
+        color: #2D4F2B;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+        text-align: center;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background-color: #708A58;
+          color: white;
+        }
+      }
+    }
+  }
+  
+  .dashboard-sections {
+    margin-bottom: 2.5rem;
+    
+    .dashboard-section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        
+        h2 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #2D4F2B;
+          margin: 0;
+        }
+        
+        .view-all {
+          color: #708A58;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 0.875rem;
+          
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      
+      .promotions-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        
+        .promotion-card {
+          display: flex;
+          border: 1px solid #eee;
+          border-radius: 8px;
+          overflow: hidden;
+          
+          @media (max-width: 576px) {
+            flex-direction: column;
+          }
+          
+          .promotion-info {
+            flex: 1;
+            padding: 1rem;
+            
+            h3 {
+              font-size: 1.1rem;
+              font-weight: 600;
+              color: #2D4F2B;
+              margin-bottom: 0.5rem;
+            }
+            
+            p {
+              font-size: 0.875rem;
+              color: #666;
+              margin-bottom: 1rem;
+              line-height: 1.4;
+            }
+            
+            .promotion-meta {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 1rem;
+              
+              .discount, .validity {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.8rem;
+                color: #555;
+                
+                svg {
+                  color: #708A58;
+                }
+              }
+            }
+          }
+          
+          .promotion-image {
+            width: 120px;
+            
+            @media (max-width: 576px) {
+              width: 100%;
+              height: 120px;
+              order: -1;
+            }
+            
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+      
+      .empty-state {
+        text-align: center;
+        padding: 2rem 0;
+        
+        p {
+          color: #666;
+          margin-bottom: 1rem;
+        }
+        
+        .create-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 1rem;
+          background-color: #708A58;
+          color: white;
+          border-radius: 6px;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 0.875rem;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background-color: #2D4F2B;
+          }
+        }
+      }
+    }
+  }
+  
+  .quick-actions {
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #2D4F2B;
+      margin-bottom: 1rem;
+    }
+    
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      
+      .action-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background-color: white;
+        padding: 1.5rem 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        color: #2D4F2B;
+        transition: all 0.2s ease;
+        text-align: center;
+        
+        svg {
+          color: #708A58;
+        }
+        
+        span {
+          font-weight: 500;
+          font-size: 0.9rem;
+        }
+        
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          
+          svg {
+            color: #2D4F2B;
+          }
+        }
+        
+        &.preview {
+          background-color: #FFB823;
+          color: #2D4F2B;
+          
+          &:hover {
+            background-color: #FFA500;
+          }
+        }
+      }
+    }
+  }
+}

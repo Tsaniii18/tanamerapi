@@ -1,0 +1,222 @@
+.menu-detail-page {
+  padding: 8rem 0 5rem;
+  background-color: #FFF1CA;
+  min-height: 100vh;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  
+  .breadcrumb {
+    margin-bottom: 2rem;
+    
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #2D4F2B;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: #FFB823;
+      }
+    }
+  }
+  
+  .menu-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+    }
+    
+    .menu-image {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    
+    .menu-info {
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2D4F2B;
+        margin-bottom: 1rem;
+        
+        @media (max-width: 768px) {
+          font-size: 2rem;
+        }
+      }
+      
+      .menu-price {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #2D4F2B;
+        margin-bottom: 2rem;
+      }
+      
+      .menu-description {
+        margin-bottom: 2.5rem;
+        
+        h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #2D4F2B;
+          margin-bottom: 0.75rem;
+        }
+        
+        p {
+          font-size: 1.1rem;
+          line-height: 1.7;
+          color: #555;
+        }
+      }
+      
+      .menu-cta {
+        .order-button {
+          display: inline-block;
+          background-color: #FFB823;
+          color: #2D4F2B;
+          padding: 0.75rem 2rem;
+          border-radius: 50px;
+          font-weight: 600;
+          font-size: 1.1rem;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background-color: #2D4F2B;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+    }
+  }
+  
+  .related-menu {
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2D4F2B;
+      margin-bottom: 2rem;
+      
+      @media (max-width: 768px) {
+        font-size: 1.75rem;
+      }
+    }
+    
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    
+    .related-card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      
+      .related-image {
+        height: 180px;
+        overflow: hidden;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: all 0.5s ease;
+        }
+      }
+      
+      &:hover .related-image img {
+        transform: scale(1.1);
+      }
+      
+      .related-info {
+        padding: 1.25rem;
+        
+        h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #2D4F2B;
+          margin-bottom: 0.5rem;
+        }
+        
+        .related-price {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #2D4F2B;
+        }
+      }
+    }
+  }
+}
+
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: 2rem;
+  
+  svg {
+    color: #708A58;
+    margin-bottom: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2D4F2B;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #2D4F2B;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: #FFB823;
+      color: #2D4F2B;
+    }
+  }
+}

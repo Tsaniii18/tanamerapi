@@ -1,0 +1,47 @@
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 16px;
+  transition: all 0.3s ease;
+  color: white;
+  
+  &.instagram {
+    background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(225, 48, 108, 0.3);
+    }
+  }
+  
+  &.whatsapp {
+    background-color: #25D366;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+    }
+  }
+  
+  &.tiktok {
+    background-color: #000000;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  &.gmaps {
+    background-color: #DB4437;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(219, 68, 55, 0.3);
+    }
+  }
+}
