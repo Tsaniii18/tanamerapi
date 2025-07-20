@@ -89,7 +89,7 @@ const Navbar = () => {
             <NavLink to="/menu" onClick={closeMenu}>Menu</NavLink>
             <NavLink to="/packages" onClick={closeMenu}>Paket Jeep & Jeruk</NavLink>
             <NavLink to="/promotions" onClick={closeMenu}>Promo</NavLink>
-            <NavLink to="/contact" onClick={closeMenu}>Kontak</NavLink>
+            <NavLink to="/contact" onClick={closeMenu}>Kontak & Lokasi</NavLink>
           </div>
           
           <div className="sidebar-footer">
