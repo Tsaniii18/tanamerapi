@@ -4,7 +4,7 @@ import api from '../../utils/api';
 import './PackagesPage.scss';
 import Loader from '../../shared/components/Loader';
 import { formatCurrency } from '../../utils/formatCurrency';
-import { Search, Apple, Car } from 'lucide-react';
+import { Search, Package, Car, Apple, Users } from 'lucide-react';
 
 const PackagesPage = () => {
   const [packages, setPackages] = useState([]);
@@ -36,30 +36,36 @@ const PackagesPage = () => {
   
   return (
     <div className="packages-page">
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-content">
-          <h1>Paket Jeep & Petik Jeruk</h1>
-        </div>
-      </section>
-      
-      {/* Packages Section */}
-      <section className="section packages-section">
+      {/* Enhanced Header Section */}
+      <section className="packages-header">
         <div className="container">
-          <div className="filters">
+          <div className="header-content">
+            <div className="title-area">
+              <Package size={32} className="title-icon" />
+              <div>
+                <h1>Paket Jeep & Petik Jeruk</h1>
+                <p>Jelajahi berbagai paket wisata menarik di kawasan Tanah Merapi</p>
+              </div>
+            </div>
+            
             <div className="search-container">
               <div className="search-input">
                 <Search size={20} />
                 <input 
                   type="text" 
-                  placeholder="Cari paket..." 
+                  placeholder="Cari paket wisata..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </div>
           </div>
-          
+        </div>
+      </section>
+      
+      {/* Packages Section */}
+      <section className="section packages-section">
+        <div className="container">
           {loading ? (
             <Loader />
           ) : filteredPackages.length > 0 ? (
@@ -71,13 +77,31 @@ const PackagesPage = () => {
                       src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${pkg.image_url}`} 
                       alt={pkg.name}
                     />
-                    {/* Removed the package-type badge */}
+                    <div className="package-badge">
+                      {pkg.type === 'jeep' ? (
+                        <>
+                          <Car size={16} />
+                          <span>Jeep</span>
+                        </>
+                      ) : (
+                        <>
+                          <Apple size={16} />
+                          <span>Jeruk</span>
+                        </>
+                      )}
+                    </div>
+                    {pkg.min_participants && pkg.max_participants && (
+                      <div className="participant-badge">
+                        <Users size={14} />
+                        <span>{pkg.min_participants}-{pkg.max_participants} orang</span>
+                      </div>
+                    )}
                   </div>
                   <div className="package-info">
                     <h3>{pkg.name}</h3>
                     {pkg.type === 'jeep' && pkg.route && (
                       <div className="package-route">
-                        {/* Removed MapPin icon and added bold class */}
+                        <span className="route-label">Rute:</span>
                         <span className="route-text">{pkg.route}</span>
                       </div>
                     )}
@@ -90,7 +114,7 @@ const PackagesPage = () => {
                           {pkg.items.slice(0, 4).map((item, index) => (
                             <li key={index}>{item.item_name}</li>
                           ))}
-                          {pkg.items.length > 4 && <li>Dan lainnya...</li>}
+                          {pkg.items.length > 4 && <li>Dan {pkg.items.length - 4} lainnya...</li>}
                         </ul>
                       </div>
                     )}
@@ -109,8 +133,8 @@ const PackagesPage = () => {
             <div className="no-results">
               <div className="icon-container">
                 <div className="icon-group">
-                  <Car size={24}/>
-                  <Apple size={24} />
+                  <Car size={28}/>
+                  <Apple size={28} />
                 </div>
               </div>
               <h3>Paket Tidak Ditemukan</h3>

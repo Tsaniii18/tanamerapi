@@ -4,7 +4,7 @@ import api from '../../utils/api';
 import './MenuPage.scss';
 import Loader from '../../shared/components/Loader';
 import { formatCurrency } from '../../utils/formatCurrency';
-import { Coffee, Search } from 'lucide-react';
+import { Coffee, Search, Utensils } from 'lucide-react';
 
 const MenuPage = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -33,29 +33,36 @@ const MenuPage = () => {
   
   return (
     <div className="menu-page">
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-content">
-          <h1>Menu Kedai Tanah Merapi</h1>
-          <p>Nikmati hidangan kami dengan suasana alam yang menyegarkan</p>
+      {/* Enhanced Header Section */}
+      <section className="menu-header">
+        <div className="container">
+          <div className="header-content">
+            <div className="title-area">
+              <Utensils size={32} className="title-icon" />
+              <div>
+                <h1>Menu Kedai Tanah Merapi</h1>
+                <p>Nikmati hidangan kami dengan suasana alam yang menyegarkan</p>
+              </div>
+            </div>
+            
+            <div className="search-container">
+              <div className="search-input">
+                <Search size={20} />
+                <input 
+                  type="text" 
+                  placeholder="Cari menu..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       
       {/* Menu Section */}
       <section className="section menu-section">
         <div className="container">
-          <div className="search-container">
-            <div className="search-input">
-              <Search size={20} />
-              <input 
-                type="text" 
-                placeholder="Cari menu..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          
           {loading ? (
             <Loader />
           ) : filteredMenuItems.length > 0 ? (
@@ -67,6 +74,7 @@ const MenuPage = () => {
                       src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${menuItem.image_url}`} 
                       alt={menuItem.name}
                     />
+                    <div className="menu-badge">Populer</div>
                   </div>
                   <div className="menu-info">
                     <h3>{menuItem.name}</h3>

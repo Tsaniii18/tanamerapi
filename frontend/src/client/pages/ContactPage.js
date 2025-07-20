@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useOutletContext } from 'react-router-dom';
 import './ContactPage.scss';
 import SocialMediaIcon from '../../shared/components/SocialMediaIcon';
+import { MapPin, Phone, Mail } from 'lucide-react';
 
 const ContactPage = () => {
   const socialMedia = useOutletContext();
@@ -36,25 +37,61 @@ const ContactPage = () => {
   
   return (
     <div className="contact-page">
+      {/* Enhanced Header Section */}
+      <section className="contact-header">
+        <div className="container">
+          <div className="header-content">
+            <div className="title-area">
+              <Mail size={32} className="title-icon" />
+              <div>
+                <h1>Hubungi Kami</h1>
+                <p>Kami siap membantu Anda dengan informasi dan layanan terbaik</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Contact Section */}
       <section className="section contact-section">
         <div className="container">
-          <div className="contact-content-centered">
-            <h2 className="section-title">Informasi Kontak</h2>
-            
-            <div className="social-media-list">
-              {socialMedia.map((social) => (
-                <div key={social.id} className="info-item">
+          <div className="contact-cards">
+            {socialMedia.map((social) => (
+              <div key={social.id} className="contact-card">
+                <div className="icon-container">
                   <SocialMediaIcon
                     platform={social.platform}
                     url={social.url}
                   />
-                  <div>
-                    <h3>{social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}</h3>
-                    <p>{getSocialMediaDisplay(social.platform, social.url)}</p>
-                  </div>
                 </div>
-              ))}
+                <div className="contact-info">
+                  <h3>{social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}</h3>
+                  <p>{getSocialMediaDisplay(social.platform, social.url)}</p>
+                  <a href={social.url} target="_blank" rel="noopener noreferrer" className="contact-button">
+                    Hubungi
+                  </a>
+                </div>
+              </div>
+            ))}
+            
+            <div className="contact-card">
+              <div className="icon-container">
+                <div className="social-media-link">
+                  <MapPin size={45} />
+                </div>
+              </div>
+              <div className="contact-info">
+                <h3>Lokasi</h3>
+                <p>Agrowisata Petik Jeruk, Tanah Merapi</p>
+                <a 
+                  href="https://maps.app.goo.gl/ZKLtqrCe1BLRDjYu8" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="contact-button"
+                >
+                  Petunjuk Arah
+                </a>
+              </div>
             </div>
           </div>
         </div>

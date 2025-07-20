@@ -4,7 +4,7 @@ import api from '../../utils/api';
 import './PromotionsPage.scss';
 import Loader from '../../shared/components/Loader';
 import { formatCurrency, formatDate } from '../../utils/formatCurrency';
-import { Tag, Percent, Calendar, AlertCircle } from 'lucide-react';
+import { Tag, Percent, Calendar, AlertCircle, Ticket } from 'lucide-react';
 
 const PromotionsPage = () => {
   const [promotions, setPromotions] = useState([]);
@@ -35,11 +35,32 @@ const PromotionsPage = () => {
   
   return (
     <div className="promotions-page">
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-content">
-          <h1>Promo Spesial</h1>
-          <p>Nikmati penawaran terbaik untuk pengalaman di Tanah Merapi</p>
+      {/* Enhanced Header Section */}
+      <section className="promotions-header">
+        <div className="container">
+          <div className="header-content">
+            <div className="title-area">
+              <Ticket size={32} className="title-icon" />
+              <div>
+                <h1>Promo Spesial</h1>
+                <p>Nikmati penawaran terbaik untuk pengalaman di Tanah Merapi</p>
+              </div>
+            </div>
+            <div className="promotions-stats">
+              <div className="stat-item">
+                <span className="stat-value">{promotions.length}</span>
+                <span className="stat-label">Promo Aktif</span>
+              </div>
+              {promotions.length > 0 && (
+                <div className="stat-item">
+                  <span className="stat-value">
+                    {Math.max(...promotions.map(p => p.discount_percent))}%
+                  </span>
+                  <span className="stat-label">Diskon Terbesar</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
       
@@ -66,7 +87,16 @@ const PromotionsPage = () => {
                       </div>
                       
                       <div className="promotion-info">
-                        <h3>{promotion.title}</h3>
+                        <div className="promotion-header">
+                          <h3>{promotion.title}</h3>
+                          <div className="validity-indicator">
+                            <Calendar size={14} />
+                            <span>
+                              Berakhir {formatDate(promotion.valid_until)}
+                            </span>
+                          </div>
+                        </div>
+                        
                         <p>{promotion.description}</p>
                         
                         <div className="promotion-validity">
