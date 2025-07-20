@@ -1,7 +1,7 @@
 .packages-page {
   .hero {
-    height: 40vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/packages-hero.jpg');
+    height: 18vh; // Reduced height to bring title closer to search
+    min-height: 150px; // Reduced minimum height
     background-size: cover;
     background-position: center;
     position: relative;
@@ -9,9 +9,11 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding-top: 2rem; // Add top padding for navbar spacing
+    padding-bottom: 0.5rem; // Reduced bottom padding
     
     .hero-content {
-      color: white;
+      color: #2D4F2B;
       z-index: 10;
       
       h1 {
@@ -46,6 +48,7 @@
   
   .packages-section {
     background-color: #FFF1CA;
+    padding-top: 1.5rem; // Further reduced to bring search closer to title
     
     .filters {
       margin-bottom: 3rem;
@@ -99,6 +102,7 @@
       .search-container {
         display: flex;
         justify-content: center;
+        margin-top: 0; // Removed extra margin to bring search closer
         
         .search-input {
           display: flex;
@@ -197,6 +201,11 @@
             font-weight: 700; /* Make route text bold */
             color: #666;
             font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 1; /* Limit to 1 line */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
         
@@ -205,6 +214,11 @@
           margin-bottom: 1.25rem;
           font-size: 0.95rem;
           line-height: 1.5;
+          display: -webkit-box;
+          -webkit-line-clamp: 3; /* Limit description to 3 lines */
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         .package-items {

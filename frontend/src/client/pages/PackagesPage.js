@@ -40,7 +40,6 @@ const PackagesPage = () => {
       <section className="hero">
         <div className="hero-content">
           <h1>Paket Jeep & Petik Jeruk</h1>
-          <p>Nikmati pengalaman menarik di Tanah Merapi</p>
         </div>
       </section>
       

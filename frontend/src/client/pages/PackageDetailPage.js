@@ -100,7 +100,14 @@ const PackageDetailPage = () => {
             {packageData.description && (
               <div className="package-description">
                 <h3>Deskripsi</h3>
-                <p>{packageData.description || 'Tidak ada deskripsi untuk paket ini.'}</p>
+                <div className="description-text">
+                  {packageData.description.split('\n').map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      {index < packageData.description.split('\n').length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
             )}
             

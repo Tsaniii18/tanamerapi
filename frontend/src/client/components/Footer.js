@@ -1,9 +1,9 @@
-// Footer.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import SocialMediaIcon from '../../shared/components/SocialMediaIcon';
 import { MapPin } from 'lucide-react';
+import footerLogoImage from '../../images/footerlogo.png';
 
 const Footer = ({ socialMedia }) => {
   const year = new Date().getFullYear();
@@ -22,10 +22,13 @@ const Footer = ({ socialMedia }) => {
       <div className="container">
         <div className="footer-content">
           <div className="footer-info">
-            <h3 className="footer-title">
-              <span className="title-line">Tana</span>
-              <span className="title-line">Merapi</span>
-            </h3>
+            <div className="footer-logo">
+              <img 
+                src={footerLogoImage} 
+                alt="Tanah Merapi Logo"
+                className="logo-image"
+              />
+            </div>
           </div>
           
           <div className="footer-info footer-center">
