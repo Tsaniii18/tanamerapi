@@ -1,3 +1,4 @@
+// HomePage.scss
 .home-page {
   .hero-slider {
     height: 100vh;
@@ -356,6 +357,53 @@
       }
     }
     
+    // Custom navigation arrows for react-slick
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      
+      &:hover {
+        background-color: rgba(255, 184, 35, 0.8);
+        border-color: #FFB823;
+        transform: translateY(-50%) scale(1.1);
+      }
+      
+      &.carousel-prev {
+        left: 2rem;
+      }
+      
+      &.carousel-next {
+        right: 2rem;
+      }
+      
+      @media (max-width: 768px) {
+        width: 40px;
+        height: 40px;
+        
+        &.carousel-prev {
+          left: 1rem;
+        }
+        
+        &.carousel-next {
+          right: 1rem;
+        }
+      }
+    }
+    
     .slick-dots {
       position: absolute;
       bottom: 30px;
@@ -589,18 +637,6 @@
           object-fit: cover;
           transition: all 0.5s ease;
         }
-        
-        .package-type {
-          position: absolute;
-          top: 15px;
-          left: 15px;
-          background-color: #FFB823;
-          color: #2D4F2B;
-          padding: 0.35rem 1rem;
-          border-radius: 30px;
-          font-size: 0.85rem;
-          font-weight: 600;
-        }
       }
       
       &:hover .package-image img {
@@ -627,24 +663,21 @@
         .package-details {
           margin-bottom: 1.5rem;
           
-          .package-items {
+          .package-route {
             margin-bottom: 1rem;
             
             span {
               font-weight: 600;
               font-size: 0.9rem;
               color: #555;
+              display: block;
+              margin-bottom: 0.5rem;
             }
             
-            ul {
-              margin-top: 0.5rem;
-              padding-left: 1.25rem;
-              
-              li {
-                font-size: 0.9rem;
-                color: #666;
-                margin-bottom: 0.25rem;
-              }
+            p {
+              margin: 0;
+              font-size: 0.9rem;
+              color: #666;
             }
           }
           
