@@ -12,11 +12,7 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
     // Prevent scrolling when sidebar is open
-    if (!isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = !isOpen ? 'hidden' : 'auto';
   };
   
   const closeMenu = () => {
@@ -71,7 +67,11 @@ const Navbar = () => {
           </button>
         </div>
         
-        <div className={`sidebar-overlay ${isOpen ? 'is-active' : ''}`} onClick={closeMenu}></div>
+        {/* Dark overlay for sidebar */}
+        <div 
+          className={`sidebar-overlay ${isOpen ? 'is-active' : ''}`} 
+          onClick={closeMenu}
+        ></div>
         
         <nav className={`navbar-menu ${isOpen ? 'is-active' : ''}`} ref={sidebarRef}>
           <div className="sidebar-header">

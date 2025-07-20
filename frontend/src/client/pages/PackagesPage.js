@@ -4,7 +4,7 @@ import api from '../../utils/api';
 import './PackagesPage.scss';
 import Loader from '../../shared/components/Loader';
 import { formatCurrency } from '../../utils/formatCurrency';
-import { MapPin, Search, Apple, Car } from 'lucide-react';
+import { Search, Apple, Car } from 'lucide-react';
 
 const PackagesPage = () => {
   const [packages, setPackages] = useState([]);
@@ -72,26 +72,14 @@ const PackagesPage = () => {
                       src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${pkg.image_url}`} 
                       alt={pkg.name}
                     />
-                    <div className="package-type">
-                      {pkg.type === 'jeep' ? (
-                        <>
-                          <Car size={20}/>
-                          <span>Jeep</span>
-                        </>
-                      ) : (
-                        <>
-                          <Apple size={20}/>
-                          <span>Petik Jeruk</span>
-                        </>
-                      )}
-                    </div>
+                    {/* Removed the package-type badge */}
                   </div>
                   <div className="package-info">
                     <h3>{pkg.name}</h3>
                     {pkg.type === 'jeep' && pkg.route && (
                       <div className="package-route">
-                        <MapPin size={16} />
-                        <span>{pkg.route}</span>
+                        {/* Removed MapPin icon and added bold class */}
+                        <span className="route-text">{pkg.route}</span>
                       </div>
                     )}
                     <p>{pkg.description}</p>

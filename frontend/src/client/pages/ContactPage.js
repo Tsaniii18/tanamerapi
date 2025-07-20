@@ -5,14 +5,6 @@ import SocialMediaIcon from '../../shared/components/SocialMediaIcon';
 
 const ContactPage = () => {
   const socialMedia = useOutletContext();
-  const [loading, setLoading] = useState(false);
-  const [formStatus, setFormStatus] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    eInstagram: '',
-    MessageCircle: '',
-    message: ''
-  });
   
   // Helper function to get display text for a social media platform
   const getSocialMediaDisplay = (platform, url) => {
@@ -42,136 +34,27 @@ const ContactPage = () => {
     }
   };
   
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Simple form validation
-    if (!formData.name || !formData.eInstagram || !formData.message) {
-      setFormStatus({
-        type: 'error',
-        message: 'Harap isi semua kolom yang diperlukan.'
-      });
-      return;
-    }
-    
-    // EInstagram validation
-    const eInstagramRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!eInstagramRegex.test(formData.eInstagram)) {
-      setFormStatus({
-        type: 'error',
-        message: 'Format eInstagram tidak valid.'
-      });
-      return;
-    }
-    
-    // Simulate form submission (in a real app, you would send this to your API)
-    setLoading(true);
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      setLoading(false);
-      setFormStatus({
-        type: 'success',
-        message: 'Pesan Anda telah dikirim! Kami akan menghubungi Anda segera.'
-      });
-      
-      // Clear form
-      setFormData({
-        name: '',
-        eInstagram: '',
-        MessageCircle: '',
-        message: ''
-      });
-      
-      // Clear success message after 5 seconds
-      setTimeout(() => {
-        setFormStatus(null);
-      }, 5000);
-    }, 1500);
-  };
-  
-  // Find specific social media platforms
-  const instagramData = socialMedia.find(sm => sm.platform.toLowerCase() === 'instagram');
-  const tiktokData = socialMedia.find(sm => sm.platform.toLowerCase() === 'tiktok');
-  const whatsappData = socialMedia.find(sm => sm.platform.toLowerCase() === 'whatsapp');
-  
   return (
     <div className="contact-page">
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-content">
-          <h1>Hubungi Kami</h1>
-          <p>Kami siap membantu Anda dengan segala pertanyaan</p>
-        </div>
-      </section>
-      
       {/* Contact Section */}
       <section className="section contact-section">
         <div className="container">
-          <div className="contact-grid">
-            <div className="contact-info">
-              <h2 className="section-title">Informasi Kontak</h2>
-              
-              {whatsappData && (
-                <div className="info-item">
+          <div className="contact-content-centered">
+            <h2 className="section-title">Informasi Kontak</h2>
+            
+            <div className="social-media-list">
+              {socialMedia.map((social) => (
+                <div key={social.id} className="info-item">
                   <SocialMediaIcon
-                    platform="whatsapp"
-                    url={whatsappData.url}
+                    platform={social.platform}
+                    url={social.url}
                   />
                   <div>
-                    <h3>WhatsApp</h3>
-                    <p>{getSocialMediaDisplay('whatsapp', whatsappData.url)}</p>
+                    <h3>{social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}</h3>
+                    <p>{getSocialMediaDisplay(social.platform, social.url)}</p>
                   </div>
                 </div>
-              )}
-              
-              {instagramData && (
-                <div className="info-item">
-                  <SocialMediaIcon
-                    platform="instagram"
-                    url={instagramData.url}
-                  />
-                  <div>
-                    <h3>Instagram</h3>
-                    <p>{getSocialMediaDisplay('instagram', instagramData.url)}</p>
-                  </div>
-                </div>
-              )}
-              
-              {tiktokData && (
-                <div className="info-item">
-                  <SocialMediaIcon
-                    platform="tiktok"
-                    url={tiktokData.url}
-                  />
-                  <div>
-                    <h3>TikTok</h3>
-                    <p>{getSocialMediaDisplay('tiktok', tiktokData.url)}</p>
-                  </div>
-                </div>
-              )}
-              
-              {/* Display any other social media platforms dynamically */}
-              {socialMedia
-                .filter(sm => !['instagram', 'tiktok', 'whatsapp'].includes(sm.platform.toLowerCase()))
-                .map(sm => (
-                  <div key={sm.id} className="info-item">
-                    <SocialMediaIcon
-                      platform={sm.platform}
-                      url={sm.url}
-                    />
-                    <div>
-                      <h3>{sm.platform.charAt(0).toUpperCase() + sm.platform.slice(1)}</h3>
-                      <p>{getSocialMediaDisplay(sm.platform, sm.url)}</p>
-                    </div>
-                  </div>
-                ))
-              }
+              ))}
             </div>
           </div>
         </div>

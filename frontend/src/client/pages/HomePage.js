@@ -60,7 +60,7 @@ const HomePage = () => {
   const getFeaturedSocialMedia = () => {
     return socialMedia.filter(sm => 
       ['instagram', 'tiktok', 'whatsapp'].includes(sm.platform.toLowerCase())
-    ).slice(0, 2); // Take only first two for hero section
+    ); // Removed the .slice(0, 2) to show all matching social media icons
   };
   
   useEffect(() => {
@@ -98,7 +98,7 @@ const HomePage = () => {
           );
           setTimeout(() => setIsTransitioning(false), 500);
         }
-      }, 4000); // Change every 4 seconds
+      }, 2000); // Changed to 4.5 seconds (4500ms)
       
       return () => clearInterval(interval);
     }
@@ -111,7 +111,7 @@ const HomePage = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 4500, // Changed to 4.5 seconds (4500ms)
     pauseOnHover: true,
     arrows: false // We'll use our custom arrows instead of the default ones
   };
@@ -178,24 +178,28 @@ const HomePage = () => {
                   <div className="hero-overlay"></div>
                   <div className="hero-content">
                     <h1>{slide.title}</h1>
-                    <p>Nikmati keindahan alam di lereng Gunung Merapi</p>
-                    <Link to="/contact" className="cta-button">
-                      Kunjungi Kami
-                    </Link>
-                    <div className="hero-social-media">
-                      {featuredSocialMedia.map(sm => (
-                        <SocialMediaIcon
-                          key={sm.id}
-                          platform={sm.platform}
-                          url={sm.url}
-                          isLarge={true}
-                        />
-                      ))}
-                    </div>
+                    <p>{slide.description || 'Nikmati keindahan alam di lereng Gunung Merapi'}</p>
                   </div>
                 </div>
               ))}
             </Slider>
+            
+            {/* Fixed CTA button and social media icons */}
+            <div className="hero-fixed-content">
+              <Link to="/contact" className="cta-button">
+                Kunjungi Kami
+              </Link>
+              <div className="hero-social-media">
+                {featuredSocialMedia.map(sm => (
+                  <SocialMediaIcon
+                    key={sm.id}
+                    platform={sm.platform}
+                    url={sm.url}
+                    isLarge={true}
+                  />
+                ))}
+              </div>
+            </div>
             
             {/* Custom Navigation Arrows for react-slick */}
             <button className="carousel-nav carousel-prev" onClick={goToPrev}>
@@ -244,6 +248,10 @@ const HomePage = () => {
               <div className="hero-content">
                 <h1>Selamat Datang di Tanah Merapi</h1>
                 <p>Nikmati keindahan alam di lereng Gunung Merapi</p>
+              </div>
+              
+              {/* Fixed CTA button and social media icons */}
+              <div className="hero-fixed-content">
                 <Link to="/contact" className="cta-button">
                   Kunjungi Kami
                 </Link>
@@ -330,7 +338,6 @@ const HomePage = () => {
                     src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${pkg.image_url}`} 
                     alt={pkg.name}
                   />
-                  <div className="package-type">{pkg.type === 'jeep' ? 'Jeep' : 'Petik Jeruk'}</div>
                 </div>
                 <div className="package-info">
                   <h3>{pkg.name}</h3>

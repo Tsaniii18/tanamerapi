@@ -37,10 +37,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        
-        @media (max-width: 991px) {
-          display: none;
-        }
       }
     }
     
@@ -165,8 +161,10 @@
     .sidebar {
       width: 70px;
       
-      .logo {
-        display: none;
+      .sidebar-header {
+        .logo {
+          display: none;
+        }
       }
       
       .sidebar-nav {

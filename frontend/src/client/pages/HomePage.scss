@@ -128,24 +128,18 @@
         }
       }
       
-      // Hero Content for Custom Carousel - FIXED CENTERING
+      // Hero Content for Custom Carousel - Updated for title and description only
       .hero-content {
         position: absolute;
-        top: 50%;
+        top: 30%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translateX(-50%);
         text-align: center;
         color: white;
         z-index: 15;
         width: 100%;
-        max-width: none;
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        max-width: 900px;
+        padding: 0 1.5rem;
         
         h1 {
           font-size: clamp(2rem, 6vw, 4rem);
@@ -174,102 +168,21 @@
         
         p {
           font-size: clamp(1rem, 2.5vw, 1.25rem);
-          margin: 0 0 2rem 0;
+          margin: 0;
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
           line-height: 1.4;
           text-align: center;
           width: 100%;
           display: block;
         }
-        
-        .cta-button {
-          display: inline-block;
-          background-color: #FFB823;
-          color: #2D4F2B;
-          padding: 0.75rem 2rem;
-          border-radius: 50px;
-          font-weight: 600;
-          font-size: clamp(1rem, 2vw, 1.125rem);
-          text-decoration: none;
-          transition: all 0.3s ease;
-          margin: 0 0 2rem 0;
-          
-          &:hover {
-            background-color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-          }
-        }
-        
-        .hero-social-media {
-          display: flex;
-          gap: 1.5rem;
-          justify-content: center;
-          align-items: center;
-          margin: 0;
-          width: 100%;
-          
-          .social-media-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            
-            &:hover {
-              background-color: rgba(255, 184, 35, 0.8);
-              border-color: #FFB823;
-              transform: scale(1.1);
-              box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            }
-            
-            img {
-              width: 32px !important;
-              height: 32px !important;
-              object-fit: contain;
-              filter: brightness(1.2);
-              transition: all 0.3s ease;
-            }
-            
-            &:hover img {
-              filter: brightness(1) contrast(1.2);
-            }
-          }
-          
-          @media (max-width: 768px) {
-            gap: 1.2rem;
-            
-            .social-media-link {
-              width: 50px;
-              height: 50px;
-              
-              img {
-                width: 28px !important;
-                height: 28px !important;
-              }
-            }
-          }
-          
-          @media (max-width: 480px) {
-            gap: 1rem;
-            
-            .social-media-link {
-              width: 45px;
-              height: 45px;
-              
-              img {
-                width: 24px !important;
-                height: 24px !important;
-              }
-            }
-          }
-        }
       }
+    }
+    
+    // For React Slick slider
+    .slider-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
     }
     
     .hero-slide {
@@ -291,11 +204,12 @@
         background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
       }
       
+      // Updated hero content for React Slick slides
       .hero-content {
         position: absolute;
-        top: 50%;
+        top: 30%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translateX(-50%);
         text-align: center;
         color: white;
         z-index: 10;
@@ -330,98 +244,115 @@
         
         p {
           font-size: clamp(1rem, 2.5vw, 1.25rem);
-          margin: 0 0 2rem 0;
+          margin: 0;
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
           line-height: 1.4;
           text-align: center;
         }
+      }
+    }
+    
+    // Fixed content that stays the same across all slides
+    .hero-fixed-content {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      text-align: center;
+      width: 100%;
+      max-width: 900px;
+      
+      .cta-button {
+        display: inline-block;
+        background-color: #FFB823;
+        color: #2D4F2B;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: clamp(1rem, 2vw, 1.125rem);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin: 0 0 2rem 0;
         
-        .cta-button {
-          display: inline-block;
-          background-color: #FFB823;
-          color: #2D4F2B;
-          padding: 0.75rem 2rem;
-          border-radius: 50px;
-          font-weight: 600;
-          font-size: clamp(1rem, 2vw, 1.125rem);
-          text-decoration: none;
+        &:hover {
+          background-color: white;
+          transform: translateY(-3px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+      }
+      
+      .hero-social-media {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        width: 100%;
+        
+        .social-media-link {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          height: 60px;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          backdrop-filter: blur(10px);
+          border: 2px solid rgba(255, 255, 255, 0.2);
           transition: all 0.3s ease;
-          margin: 0 0 2rem 0;
           
           &:hover {
-            background-color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 184, 35, 0.8);
+            border-color: #FFB823;
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+          }
+          
+          img {
+            width: 32px !important;
+            height: 32px !important;
+            object-fit: contain;
+            filter: brightness(1.2);
+            transition: all 0.3s ease;
+          }
+          
+          &:hover img {
+            filter: brightness(1) contrast(1.2);
           }
         }
         
-        .hero-social-media {
-          display: flex;
-          gap: 1.5rem;
-          justify-content: center;
-          align-items: center;
-          margin: 0;
+        @media (max-width: 768px) {
+          gap: 1.2rem;
           
           .social-media-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 70px;
-            height: 70px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            
-            &:hover {
-              background-color: rgba(255, 184, 35, 0.8);
-              border-color: #FFB823;
-              transform: scale(1.1);
-              box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            }
+            width: 50px;
+            height: 50px;
             
             img {
-              width: 40px !important;
-              height: 40px !important;
-              object-fit: contain;
-              filter: brightness(1.2);
-              transition: all 0.3s ease;
-            }
-            
-            &:hover img {
-              filter: brightness(1) contrast(1.2);
-            }
-          }
-          
-          @media (max-width: 768px) {
-            gap: 1.2rem;
-            
-            .social-media-link {
-              width: 60px;
-              height: 60px;
-              
-              img {
-                width: 32px !important;
-                height: 32px !important;
-              }
-            }
-          }
-          
-          @media (max-width: 480px) {
-            gap: 1rem;
-            
-            .social-media-link {
-              width: 50px;
-              height: 50px;
-              
-              img {
-                width: 28px !important;
-                height: 28px !important;
-              }
+              width: 28px !important;
+              height: 28px !important;
             }
           }
         }
+        
+        @media (max-width: 480px) {
+          gap: 1rem;
+          
+          .social-media-link {
+            width: 45px;
+            height: 45px;
+            
+            img {
+              width: 24px !important;
+              height: 24px !important;
+            }
+          }
+        }
+      }
+      
+      @media (max-width: 768px) {
+        bottom: 10%;
       }
     }
     
