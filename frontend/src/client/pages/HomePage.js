@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, NavLink, useOutletContext } from 'react-router-dom';
 import Slider from 'react-slick';
 import api from '../../utils/api';
 import './HomePage.scss';
@@ -8,9 +8,10 @@ import merapiImage from '../../images/merapi.jpg';
 import contohImage from '../../images/contoh.jpeg';
 import beyonceImage from '../../images/beyonce.png';
 import hissImage from '../../images/hiss.png';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Menu } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatCurrency';
 import SocialMediaIcon from '../../shared/components/SocialMediaIcon';
+import logoImage from '../../images/logo.png';
 
 const HomePage = () => {
   const socialMedia = useOutletContext();
@@ -22,6 +23,11 @@ const HomePage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   
+  // Navbar states
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const sidebarRef = useRef(null);
+  
   // Create a ref for the slider to access its methods
   const sliderRef = useRef(null);
   
@@ -31,6 +37,18 @@ const HomePage = () => {
     { src: beyonceImage, alt: "Beyonce Image" },
     { src: hissImage, alt: "Hiss Image" }
   ];
+  
+  // Navbar functions
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    // Prevent scrolling when sidebar is open
+    document.body.style.overflow = !isOpen ? 'hidden' : 'auto';
+  };
+  
+  const closeMenu = () => {
+    setIsOpen(false);
+    document.body.style.overflow = 'auto';
+  };
   
   // Helper function to get display text for a social media platform
   const getSocialMediaDisplay = (platform, url) => {
@@ -60,7 +78,7 @@ const HomePage = () => {
   const getFeaturedSocialMedia = () => {
     return socialMedia.filter(sm => 
       ['instagram', 'tiktok', 'whatsapp'].includes(sm.platform.toLowerCase())
-    ); // Removed the .slice(0, 2) to show all matching social media icons
+    );
   };
   
   useEffect(() => {
@@ -87,6 +105,36 @@ const HomePage = () => {
     fetchData();
   }, []);
   
+  // Handle scroll effect for navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50); // Add background after scrolling 50px
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+  
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isOpen) {
+        closeMenu();
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+  
   // Auto-slide effect - only when no slides from API
   useEffect(() => {
     if (slides.length === 0) {
@@ -98,7 +146,7 @@ const HomePage = () => {
           );
           setTimeout(() => setIsTransitioning(false), 500);
         }
-      }, 2000); // Changed to 4.5 seconds (4500ms)
+      }, 2000);
       
       return () => clearInterval(interval);
     }
@@ -111,9 +159,9 @@ const HomePage = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4500, // Changed to 4.5 seconds (4500ms)
+    autoplaySpeed: 4500,
     pauseOnHover: true,
-    arrows: false // We'll use our custom arrows instead of the default ones
+    arrows: false
   };
   
   // Navigation functions for the slider from react-slick
@@ -164,8 +212,57 @@ const HomePage = () => {
   
   return (
     <div className="home-page">
-      {/* Hero Slider */}
+      {/* Hero Slider with Navbar overlay */}
       <section className="hero-slider">
+        {/* Navbar Component directly inside the HomePage */}
+        <header className={`navbar homepage-navbar ${isScrolled ? 'navbar-scrolled' : ''}`}>
+          <div className="container">
+            <div className="navbar-brand">
+              <Link to="/" className="logo" onClick={closeMenu}>
+                <img 
+                  src={logoImage} 
+                  alt="Tanah Merapi Logo" 
+                  className="logo-image"
+                />
+              </Link>
+              
+              <button className="menu-button" onClick={toggleMenu} aria-label="Toggle menu">
+                <Menu size={24} />
+              </button>
+            </div>
+            
+            {/* Dark overlay for sidebar */}
+            <div 
+              className={`sidebar-overlay ${isOpen ? 'is-active' : ''}`} 
+              onClick={closeMenu}
+            ></div>
+            
+            <nav className={`navbar-menu ${isOpen ? 'is-active' : ''}`} ref={sidebarRef}>
+              <div className="sidebar-header">
+                <Link to="/" className="sidebar-logo" onClick={closeMenu}>
+                  <img 
+                    src={logoImage} 
+                    alt="Tanah Merapi Logo" 
+                    className="logo-image"
+                  />
+                </Link>
+              </div>
+              
+              <div className="navbar-links">
+                <NavLink to="/" onClick={closeMenu}>Home</NavLink>
+                <NavLink to="/menu" onClick={closeMenu}>Menu</NavLink>
+                <NavLink to="/packages" onClick={closeMenu}>Paket Jeep & Jeruk</NavLink>
+                <NavLink to="/promotions" onClick={closeMenu}>Promo</NavLink>
+                <NavLink to="/contact" onClick={closeMenu}>Kontak & Lokasi</NavLink>
+              </div>
+              
+              <div className="sidebar-footer">
+                <p>© 2025 Tanah Merapi</p>
+              </div>
+            </nav>
+          </div>
+        </header>
+
         {slides.length > 0 ? (
           <div className="slider-container">
             <Slider ref={sliderRef} {...sliderSettings}>
