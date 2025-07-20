@@ -1,3 +1,4 @@
+// PromotionsList.scss
 .promotions-list-page {
   .page-actions {
     display: flex;
@@ -8,112 +9,217 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background-color: #2D4F2B;
+      background-color: #4CAF50;
       color: white;
       border: none;
-      padding: 0.6rem 1.25rem;
-      border-radius: 6px;
-      font-weight: 500;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.375rem;
       cursor: pointer;
-      transition: all 0.2s ease;
+      font-weight: 500;
+      transition: all 0.2s;
       
       &:hover {
-        background-color: #708A58;
+        background-color: #3e8e41;
       }
     }
   }
   
+  .discount-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 500;
+  }
+  
   .packages-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    
     .no-packages {
-      color: #999;
+      color: #888;
       font-style: italic;
-      font-size: 0.9rem;
     }
   }
   
   .status-badge {
     display: inline-block;
     padding: 0.25rem 0.75rem;
-    border-radius: 50px;
-    font-size: 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
     font-weight: 500;
     
     &.active {
-      background-color: rgba(112, 138, 88, 0.15);
-      color: #708A58;
+      background-color: #e8f5e9;
+      color: #2e7d32;
     }
     
     &.expired {
-      background-color: rgba(244, 67, 54, 0.15);
-      color: #f44336;
+      background-color: #f5f5f5;
+      color: #757575;
     }
   }
   
-  .form-row {
-    display: flex;
+  // Packages grid for selection
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
-    
-    @media (max-width: 576px) {
-      flex-direction: column;
-      gap: 0;
-    }
-    
-    .form-group.half {
-      flex: 1;
-    }
-  }
-  
-  .discount-input {
-    position: relative;
-    
-    input {
-      padding-right: 2.5rem;
-    }
-    
-    .percent-symbol {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #666;
-    }
-  }
-  
-  .packages-checkbox-list {
-    max-height: 200px;
+    max-height: 400px;
     overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 6px;
     padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    margin-top: 0.5rem;
     
-    .checkbox-item {
+    .package-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 0.375rem;
+      overflow: hidden;
+      background-color: white;
+      transition: all 0.2s;
+      
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        border-bottom: 1px solid #eee;
+        
+        input[type="checkbox"] {
+          width: 1.125rem;
+          height: 1.125rem;
+          cursor: pointer;
+        }
+        
+        .package-name {
+          font-weight: 500;
+          font-size: 0.875rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          cursor: pointer;
+        }
+      }
+      
+      .package-image {
+        height: 120px;
+        overflow: hidden;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s;
+          
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+      }
+      
+      .package-price {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem;
+        background-color: #f9f9f9;
+        
+        .original-price {
+          font-size: 0.875rem;
+          text-decoration: line-through;
+          color: #888;
+        }
+        
+        .discounted-price {
+          font-weight: 600;
+          color: #f44336;
+        }
+      }
+    }
+  }
+  
+  // Selected packages info
+  .selected-packages-info {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: #f1f8e9;
+    border-radius: 0.375rem;
+    border-left: 4px solid #7cb342;
+    
+    .info-header {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 0.5rem;
-      
-      input[type="checkbox"] {
-        width: auto;
-      }
-      
-      label {
-        font-weight: normal;
-        cursor: pointer;
-      }
+      font-weight: 500;
+      margin-bottom: 0.25rem;
     }
     
-    .no-packages {
-      color: #999;
-      font-style: italic;
-      padding: 0.5rem;
-      text-align: center;
+    .help-text {
+      font-size: 0.875rem;
+      color: #666;
+      margin: 0;
     }
   }
   
+  // Package preview
+  .package-preview {
+    margin-top: 1.25rem;
+    
+    .preview-container {
+      h4 {
+        margin-bottom: 0.75rem;
+        font-size: 0.938rem;
+      }
+      
+      .preview-images {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        
+        .preview-image {
+          width: 100px;
+          height: 100px;
+          border-radius: 0.375rem;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid #ddd;
+          
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .primary-badge {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(33, 150, 243, 0.9);
+            color: white;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 0.25rem;
+          }
+        }
+      }
+    }
+  }
+  
+  // Promotion detail
   .promotion-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    
     .detail-image {
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
+      width: 100%;
+      border-radius: 0.375rem;
       overflow: hidden;
       
       img {
@@ -124,59 +230,41 @@
     }
     
     .detail-info {
+      display: grid;
+      gap: 1.25rem;
+      
       .info-item {
-        margin-bottom: 1.25rem;
-        
         h4 {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: #666;
+          font-size: 0.938rem;
           margin-bottom: 0.5rem;
+          color: #555;
         }
         
         p {
-          font-size: 1rem;
-          color: #333;
           margin: 0;
           
-          &.period {
+          &.period, &.discount {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            
-            svg {
-              color: #708A58;
-            }
           }
           
           &.discount {
             font-weight: 600;
             color: #f44336;
           }
-          
-          &.no-packages {
-            color: #999;
-            font-style: italic;
-          }
         }
         
         .packages-list {
           .package-item {
-            border-bottom: 1px solid #eee;
-            padding: 0.75rem 0;
-            
-            &:first-child {
-              padding-top: 0;
-            }
-            
-            &:last-child {
-              border-bottom: none;
-              padding-bottom: 0;
-            }
+            padding: 0.75rem;
+            border: 1px solid #eee;
+            border-radius: 0.375rem;
+            margin-bottom: 0.75rem;
             
             .package-name {
               font-weight: 500;
-              margin-bottom: 0.25rem;
+              margin-bottom: 0.5rem;
             }
             
             .price-comparison {
@@ -185,23 +273,43 @@
               gap: 0.75rem;
               
               .original-price {
-                color: #999;
                 text-decoration: line-through;
-                font-size: 0.9rem;
-              }
-              
-              .arrow {
-                color: #999;
+                color: #888;
               }
               
               .discounted-price {
-                color: #f44336;
                 font-weight: 600;
+                color: #f44336;
               }
             }
           }
         }
       }
+    }
+  }
+  
+  // Form improvements
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    
+    .form-group.half {
+      flex: 1;
+    }
+  }
+  
+  .discount-input {
+    display: flex;
+    align-items: center;
+    
+    input {
+      flex: 1;
+    }
+    
+    .percent-symbol {
+      margin-left: 0.5rem;
+      font-weight: 500;
     }
   }
 }

@@ -31,6 +31,29 @@ const Package = db.define('packages', {
     validate: {
       isDecimal: true
     }
+  },
+  original_price: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: true,
+    validate: {
+      isDecimal: true
+    }
+  },
+  discount_percent: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    validate: {
+      min: 0,
+      max: 100
+    }
+  },
+  promotion_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'promotions',
+      key: 'id'
+    }
   }
 });
 

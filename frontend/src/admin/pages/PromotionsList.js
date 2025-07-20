@@ -8,7 +8,7 @@ import ImageUploader from '../components/ImageUploader';
 import Loader from '../../shared/components/Loader';
 import Message from '../../shared/components/Message';
 import api from '../../utils/api';
-import { Plus, Calendar } from 'lucide-react';
+import { Plus, Calendar, Package, Percent, ArrowRight } from 'lucide-react';
 import { formatCurrency, formatDate } from '../../utils/formatCurrency';
 
 const PromotionsList = () => {
@@ -37,6 +37,7 @@ const PromotionsList = () => {
   });
   const [formLoading, setFormLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [selectedPackageImages, setSelectedPackageImages] = useState([]);
   
   // Fetch data
   const fetchData = async () => {
@@ -89,17 +90,38 @@ const PromotionsList = () => {
     const packageId = parseInt(e.target.value);
     const isChecked = e.target.checked;
     
+    let newPackageIds;
+    
     if (isChecked) {
-      setFormData(prev => ({
-        ...prev,
-        package_ids: [...prev.package_ids, packageId]
-      }));
+      newPackageIds = [...formData.package_ids, packageId];
+      
+      // Get selected package image for preview
+      const selectedPackage = packages.find(pkg => pkg.id === packageId);
+      if (selectedPackage) {
+        setSelectedPackageImages(prev => {
+          // Add to the beginning of the array if it's the first selection
+          if (prev.length === 0) {
+            return [selectedPackage.image_url];
+          }
+          return [...prev, selectedPackage.image_url];
+        });
+      }
     } else {
-      setFormData(prev => ({
-        ...prev,
-        package_ids: prev.package_ids.filter(id => id !== packageId)
-      }));
+      newPackageIds = formData.package_ids.filter(id => id !== packageId);
+      
+      // Remove package image from preview
+      const selectedPackage = packages.find(pkg => pkg.id === packageId);
+      if (selectedPackage) {
+        setSelectedPackageImages(prev => 
+          prev.filter(img => img !== selectedPackage.image_url)
+        );
+      }
     }
+    
+    setFormData(prev => ({
+      ...prev,
+      package_ids: newPackageIds
+    }));
   };
   
   // Handle add promotion
@@ -118,6 +140,7 @@ const PromotionsList = () => {
     });
     
     setPreviewImage(null);
+    setSelectedPackageImages([]);
     setIsAddModalOpen(true);
   };
   
@@ -168,6 +191,9 @@ const PromotionsList = () => {
     // Get package IDs from promotion
     const packageIds = promotion.packages?.map(pkg => pkg.id) || [];
     
+    // Get package images for preview
+    const packageImages = promotion.packages?.map(pkg => pkg.image_url) || [];
+    
     setFormData({
       title: promotion.title,
       description: promotion.description || '',
@@ -180,6 +206,7 @@ const PromotionsList = () => {
     });
     
     setPreviewImage(promotion.image_url);
+    setSelectedPackageImages(packageImages);
     setIsEditModalOpen(true);
   };
   
@@ -251,6 +278,11 @@ const PromotionsList = () => {
     setIsViewModalOpen(true);
   };
   
+  // Calculate discounted price
+  const calculateDiscountedPrice = (originalPrice, discountPercent) => {
+    return originalPrice - (originalPrice * discountPercent / 100);
+  };
+  
   // Table columns
   const columns = [
     {
@@ -267,7 +299,12 @@ const PromotionsList = () => {
       key: 'discount_percent',
       label: 'Diskon',
       sortable: true,
-      render: (row) => `${row.discount_percent}%`
+      render: (row) => (
+        <span className="discount-cell">
+          <Percent size={14} />
+          {row.discount_percent}%
+        </span>
+      )
     },
     {
       key: 'valid_from',
@@ -287,7 +324,9 @@ const PromotionsList = () => {
       render: (row) => (
         <div className="packages-cell">
           {row.packages && row.packages.length > 0 ? (
-            <span>{row.packages.length} paket</span>
+            <span>
+              <Package size={14} /> {row.packages.length} paket
+            </span>
           ) : (
             <span className="no-packages">Tidak ada paket</span>
           )}
@@ -358,6 +397,7 @@ const PromotionsList = () => {
         title="Tambah Promo"
         submitText="Simpan"
         isLoading={formLoading}
+        size="large"
       >
         <div className="form-group">
           <label htmlFor="title">
@@ -448,22 +488,41 @@ const PromotionsList = () => {
         
         <div className="form-group">
           <label>
-            Paket yang Dipromo <span className="required">*</span>
+            Pilih Paket untuk Promo <span className="required">*</span>
           </label>
-          <div className="packages-checkbox-list">
+          <div className="packages-grid">
             {packages.length > 0 ? (
               packages.map(pkg => (
-                <div key={pkg.id} className="checkbox-item">
-                  <input
-                    type="checkbox"
-                    id={`package-${pkg.id}`}
-                    value={pkg.id}
-                    checked={formData.package_ids.includes(pkg.id)}
-                    onChange={handlePackageChange}
-                  />
-                  <label htmlFor={`package-${pkg.id}`}>
-                    {pkg.name} - {formatCurrency(pkg.price)}
-                  </label>
+                <div key={pkg.id} className="package-card">
+                  <div className="card-header">
+                    <input
+                      type="checkbox"
+                      id={`package-${pkg.id}`}
+                      value={pkg.id}
+                      checked={formData.package_ids.includes(pkg.id)}
+                      onChange={handlePackageChange}
+                    />
+                    <label htmlFor={`package-${pkg.id}`} className="package-name">
+                      {pkg.name}
+                    </label>
+                  </div>
+                  
+                  <div className="package-image">
+                    <img 
+                      src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${pkg.image_url}`} 
+                      alt={pkg.name}
+                    />
+                  </div>
+                  
+                  <div className="package-price">
+                    <div className="original-price">
+                      {formatCurrency(pkg.price)}
+                    </div>
+                    <ArrowRight size={14} />
+                    <div className="discounted-price">
+                      {formatCurrency(calculateDiscountedPrice(pkg.price, formData.discount_percent))}
+                    </div>
+                  </div>
                 </div>
               ))
             ) : (
@@ -472,17 +531,51 @@ const PromotionsList = () => {
           </div>
         </div>
         
+        {formData.package_ids.length > 0 && (
+          <div className="selected-packages-info">
+            <div className="info-header">
+              <Package size={16} />
+              <span>{formData.package_ids.length} paket dipilih</span>
+            </div>
+            <p className="help-text">
+              Gambar paket pertama yang dipilih akan digunakan sebagai gambar promo jika Anda tidak mengunggah gambar khusus.
+            </p>
+          </div>
+        )}
+        
+        <div className="package-preview">
+          {selectedPackageImages.length > 0 && (
+            <div className="preview-container">
+              <h4>Gambar dari Paket Terpilih:</h4>
+              <div className="preview-images">
+                {selectedPackageImages.slice(0, 3).map((image, index) => (
+                  <div key={index} className="preview-image">
+                    <img 
+                      src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${image}`} 
+                      alt={`Selected package ${index + 1}`}
+                    />
+                    {index === 0 && (
+                      <div className="primary-badge">Utama</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        
         <ImageUploader
           onChange={handleImageChange}
           value={formData.image}
           preview={previewImage}
           apiUrl={process.env.REACT_APP_API_URL}
-          label="Gambar Promo"
-          helpText="Opsional. Tambahkan gambar untuk promo."
+          label="Gambar Promo (Opsional)"
+          helpText="Jika tidak diunggah, gambar dari paket pertama akan digunakan."
+          required={false}
         />
       </FormModal>
       
-      {/* Edit Promotion Modal */}
+      {/* Edit Promotion Modal - Similar structure to Add Modal */}
       <FormModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
@@ -490,7 +583,9 @@ const PromotionsList = () => {
         title="Edit Promo"
         submitText="Simpan"
         isLoading={formLoading}
+        size="large"
       >
+        {/* Same form fields as Add Modal */}
         <div className="form-group">
           <label htmlFor="title">
             Judul <span className="required">*</span>
@@ -580,22 +675,41 @@ const PromotionsList = () => {
         
         <div className="form-group">
           <label>
-            Paket yang Dipromo <span className="required">*</span>
+            Pilih Paket untuk Promo <span className="required">*</span>
           </label>
-          <div className="packages-checkbox-list">
+          <div className="packages-grid">
             {packages.length > 0 ? (
               packages.map(pkg => (
-                <div key={pkg.id} className="checkbox-item">
-                  <input
-                    type="checkbox"
-                    id={`package-${pkg.id}`}
-                    value={pkg.id}
-                    checked={formData.package_ids.includes(pkg.id)}
-                    onChange={handlePackageChange}
-                  />
-                  <label htmlFor={`package-${pkg.id}`}>
-                    {pkg.name} - {formatCurrency(pkg.price)}
-                  </label>
+                <div key={pkg.id} className="package-card">
+                  <div className="card-header">
+                    <input
+                      type="checkbox"
+                      id={`package-${pkg.id}`}
+                      value={pkg.id}
+                      checked={formData.package_ids.includes(pkg.id)}
+                      onChange={handlePackageChange}
+                    />
+                    <label htmlFor={`package-${pkg.id}`} className="package-name">
+                      {pkg.name}
+                    </label>
+                  </div>
+                  
+                  <div className="package-image">
+                    <img 
+                      src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${pkg.image_url}`} 
+                      alt={pkg.name}
+                    />
+                  </div>
+                  
+                  <div className="package-price">
+                    <div className="original-price">
+                      {formatCurrency(pkg.price)}
+                    </div>
+                    <ArrowRight size={14} />
+                    <div className="discounted-price">
+                      {formatCurrency(calculateDiscountedPrice(pkg.price, formData.discount_percent))}
+                    </div>
+                  </div>
                 </div>
               ))
             ) : (
@@ -604,13 +718,47 @@ const PromotionsList = () => {
           </div>
         </div>
         
+        {formData.package_ids.length > 0 && (
+          <div className="selected-packages-info">
+            <div className="info-header">
+              <Package size={16} />
+              <span>{formData.package_ids.length} paket dipilih</span>
+            </div>
+            <p className="help-text">
+              Gambar paket pertama yang dipilih akan digunakan sebagai gambar promo jika Anda tidak mengunggah gambar khusus.
+            </p>
+          </div>
+        )}
+        
+        <div className="package-preview">
+          {selectedPackageImages.length > 0 && (
+            <div className="preview-container">
+              <h4>Gambar dari Paket Terpilih:</h4>
+              <div className="preview-images">
+                {selectedPackageImages.slice(0, 3).map((image, index) => (
+                  <div key={index} className="preview-image">
+                    <img 
+                      src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${image}`} 
+                      alt={`Selected package ${index + 1}`}
+                    />
+                    {index === 0 && (
+                      <div className="primary-badge">Utama</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        
         <ImageUploader
           onChange={handleImageChange}
           value={formData.image}
           preview={previewImage}
           apiUrl={process.env.REACT_APP_API_URL}
-          label="Gambar Promo"
-          helpText="Biarkan kosong jika tidak ingin mengubah gambar."
+          label="Gambar Promo (Opsional)"
+          helpText="Jika tidak diunggah, gambar dari paket pertama akan digunakan."
+          required={false}
         />
       </FormModal>
       
@@ -680,10 +828,18 @@ const PromotionsList = () => {
                       <div key={pkg.id} className="package-item">
                         <p className="package-name">{pkg.name}</p>
                         <div className="price-comparison">
-                          <span className="original-price">{formatCurrency(pkg.price)}</span>
+                          <span className="original-price">
+                            {pkg.original_price 
+                              ? formatCurrency(pkg.original_price) 
+                              : formatCurrency(pkg.price)}
+                          </span>
                           <span className="arrow">→</span>
                           <span className="discounted-price">
-                            {formatCurrency(pkg.price - (pkg.price * currentPromotion.discount_percent / 100))}
+                            {formatCurrency(
+                              pkg.original_price 
+                                ? pkg.price
+                                : calculateDiscountedPrice(pkg.price, currentPromotion.discount_percent)
+                            )}
                           </span>
                         </div>
                       </div>

@@ -38,6 +38,11 @@ const Promotion = db.define('promotions', {
   image_url: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  status: {
+    type: DataTypes.ENUM('active', 'inactive', 'expired'),
+    defaultValue: 'active',
+    allowNull: false
   }
 });
 

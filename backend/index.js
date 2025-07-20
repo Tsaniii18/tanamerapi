@@ -11,6 +11,7 @@ import PromotionRoute from './routes/PromotionRoute.js';
 import PromotionPackageRoute from './routes/PromotionPackageRoute.js';
 import SocialMediaRoute from './routes/SocialMediaRoute.js';
 import FileUploadRoute from './routes/FileUploadRoute.js';
+import initPromotionScheduler from './utils/PromotionScheduler.js';
 
 dotenv.config();
 
@@ -47,6 +48,10 @@ app.use('/api/upload', FileUploadRoute);
       await db.sync();
       console.log('Database synchronized');
     }
+    
+    // Initialize promotion scheduler
+    initPromotionScheduler();
+    console.log('Promotion scheduler initialized');
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

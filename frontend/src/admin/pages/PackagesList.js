@@ -9,7 +9,7 @@ import ImageUploader from '../components/ImageUploader';
 import Loader from '../../shared/components/Loader';
 import Message from '../../shared/components/Message';
 import api from '../../utils/api';
-import { Plus, MapPin } from 'lucide-react';
+import { Plus, MapPin, Percent, Tag } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const PackagesList = () => {
@@ -195,6 +195,11 @@ const PackagesList = () => {
             src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${row.image_url}`} 
             alt={row.name}
           />
+          {row.discount_percent > 0 && (
+            <div className="discount-badge">
+              <Percent size={14} /> {row.discount_percent}%
+            </div>
+          )}
         </div>
       )
     },
@@ -207,7 +212,33 @@ const PackagesList = () => {
       key: 'price',
       label: 'Harga',
       sortable: true,
-      render: (row) => formatCurrency(row.price)
+      render: (row) => (
+        <div className="price-cell">
+          {row.original_price ? (
+            <>
+              <span className="discounted-price">{formatCurrency(row.price)}</span>
+              <span className="original-price">{formatCurrency(row.original_price)}</span>
+            </>
+          ) : (
+            formatCurrency(row.price)
+          )}
+        </div>
+      )
+    },
+    {
+      key: 'discount_percent',
+      label: 'Promo',
+      render: (row) => (
+        <div className="promotion-cell">
+          {row.discount_percent > 0 ? (
+            <span className="has-promotion">
+              <Tag size={14} /> Diskon {row.discount_percent}%
+            </span>
+          ) : (
+            <span className="no-promotion">Tidak ada</span>
+          )}
+        </div>
+      )
     },
     {
       key: 'description',
@@ -441,6 +472,11 @@ const PackagesList = () => {
                 src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${currentPackage.image_url}`} 
                 alt={currentPackage.name} 
               />
+              {currentPackage.discount_percent > 0 && (
+                <div className="discount-badge">
+                  <Percent size={16} /> {currentPackage.discount_percent}% OFF
+                </div>
+              )}
             </div>
             
             <div className="detail-info">
@@ -467,8 +503,33 @@ const PackagesList = () => {
               
               <div className="info-item">
                 <h4>Harga</h4>
-                <p className="price">{formatCurrency(currentPackage.price)}</p>
+                {currentPackage.original_price ? (
+                  <div className="promo-price">
+                    <p className="original-price">
+                      <span className="label">Harga Normal:</span> 
+                      {formatCurrency(currentPackage.original_price)}
+                    </p>
+                    <p className="discounted-price">
+                      <span className="label">Harga Promo:</span> 
+                      {formatCurrency(currentPackage.price)} 
+                      <span className="discount-tag">
+                        <Percent size={14} /> {currentPackage.discount_percent}%
+                      </span>
+                    </p>
+                  </div>
+                ) : (
+                  <p className="price">{formatCurrency(currentPackage.price)}</p>
+                )}
               </div>
+              
+              {currentPackage.promotion_id && (
+                <div className="info-item">
+                  <h4>Promo</h4>
+                  <p className="promotion">
+                    <Tag size={16} /> Paket dalam promo aktif
+                  </p>
+                </div>
+              )}
               
               <div className="info-item">
                 <h4>Tanggal Dibuat</h4>
