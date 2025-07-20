@@ -38,7 +38,7 @@ const MenuPage = () => {
         <div className="container">
           <div className="header-content">
             <div className="title-area">
-              <Utensils size={32} className="title-icon" />
+              <Utensils size={62} className="title-icon" />
               <div>
                 <h1>Menu Kedai Tanah Merapi</h1>
                 <p>Nikmati hidangan kami dengan suasana alam yang menyegarkan</p>

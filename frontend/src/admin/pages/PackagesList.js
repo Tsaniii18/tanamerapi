@@ -1,3 +1,4 @@
+// PackagesList.js
 import React, { useState, useEffect } from 'react';
 import './PackagesList.scss';
 import DataTable from '../components/DataTable';
@@ -88,11 +89,9 @@ const PackagesList = () => {
       
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
-      formDataToSend.append('type', 'jeep'); // Default to 'jeep' type
       formDataToSend.append('route', formData.route || '');
       formDataToSend.append('description', formData.description || '');
       formDataToSend.append('price', formData.price);
-      formDataToSend.append('items', JSON.stringify([])); // Empty items array
       
       formDataToSend.append('image', formData.image);
       
@@ -136,11 +135,9 @@ const PackagesList = () => {
       
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
-      formDataToSend.append('type', currentPackage.type); // Keep original type
       formDataToSend.append('route', formData.route || '');
       formDataToSend.append('description', formData.description || '');
       formDataToSend.append('price', formData.price);
-      formDataToSend.append('items', JSON.stringify(currentPackage.items.map(item => item.item_name) || []));
       
       if (formData.image) {
         formDataToSend.append('image', formData.image);
@@ -452,14 +449,7 @@ const PackagesList = () => {
                 <p>{currentPackage.name}</p>
               </div>
               
-              <div className="info-item">
-                <h4>Tipe</h4>
-                <p className={`package-type ${currentPackage.type}`}>
-                  {currentPackage.type === 'jeep' ? 'Paket Jeep' : 'Paket Petik Jeruk'}
-                </p>
-              </div>
-              
-              {currentPackage.type === 'jeep' && currentPackage.route && (
+              {currentPackage.route && (
                 <div className="info-item">
                   <h4>Rute</h4>
                   <p className="route">
@@ -479,17 +469,6 @@ const PackagesList = () => {
                 <h4>Harga</h4>
                 <p className="price">{formatCurrency(currentPackage.price)}</p>
               </div>
-              
-              {currentPackage.items && currentPackage.items.length > 0 && (
-                <div className="info-item">
-                  <h4>Isi Paket</h4>
-                  <ul className="items-list">
-                    {currentPackage.items.map((item, index) => (
-                      <li key={index}>{item.item_name}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
               
               <div className="info-item">
                 <h4>Tanggal Dibuat</h4>

@@ -1,35 +1,12 @@
+// PackageController.js
 import Package from '../models/PackageModel.js';
-import PackageItem from '../models/PackageItemModel.js';
 import fs from 'fs';
 import path from 'path';
 
 // Get all packages
 export const getPackages = async (req, res) => {
   try {
-    const packages = await Package.findAll({
-      include: [
-        { model: PackageItem, as: 'items' }
-      ]
-    });
-    res.json(packages);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-// Get packages by type
-export const getPackagesByType = async (req, res) => {
-  try {
-    const { type } = req.params;
-    
-    const packages = await Package.findAll({
-      where: { type },
-      include: [
-        { model: PackageItem, as: 'items' }
-      ]
-    });
-    
+    const packages = await Package.findAll();
     res.json(packages);
   } catch (error) {
     console.error(error);
@@ -42,11 +19,7 @@ export const getPackage = async (req, res) => {
   try {
     const { id } = req.params;
     
-    const packageData = await Package.findByPk(id, {
-      include: [
-        { model: PackageItem, as: 'items' }
-      ]
-    });
+    const packageData = await Package.findByPk(id);
     
     if (!packageData) {
       return res.status(404).json({ message: 'Package not found' });
@@ -62,7 +35,7 @@ export const getPackage = async (req, res) => {
 // Create a new package
 export const createPackage = async (req, res) => {
   try {
-    const { name, type, route, description, price, items } = req.body;
+    const { name, route, description, price } = req.body;
     
     if (!req.file) {
       return res.status(400).json({ message: 'Image is required' });
@@ -73,31 +46,13 @@ export const createPackage = async (req, res) => {
     // Create package
     const packageData = await Package.create({
       name,
-      type,
-      route: type === 'jeep' ? route : null,
+      route,
       description,
       image_url,
       price
     });
     
-    // Create package items if provided
-    if (items && Array.isArray(items) && items.length > 0) {
-      const packageItems = items.map(item => ({
-        package_id: packageData.id,
-        item_name: item
-      }));
-      
-      await PackageItem.bulkCreate(packageItems);
-    }
-    
-    // Fetch created package with items
-    const createdPackage = await Package.findByPk(packageData.id, {
-      include: [
-        { model: PackageItem, as: 'items' }
-      ]
-    });
-    
-    res.status(201).json(createdPackage);
+    res.status(201).json(packageData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -108,7 +63,7 @@ export const createPackage = async (req, res) => {
 export const updatePackage = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, type, route, description, price } = req.body;
+    const { name, route, description, price } = req.body;
     
     const packageData = await Package.findByPk(id);
     if (!packageData) {
@@ -134,21 +89,13 @@ export const updatePackage = async (req, res) => {
     // Update package
     await packageData.update({
       name: name || packageData.name,
-      type: type || packageData.type,
-      route: type === 'jeep' ? (route || packageData.route) : null,
+      route: route || packageData.route,
       description: description !== undefined ? description : packageData.description,
       image_url,
       price: price || packageData.price
     });
     
-    // Fetch updated package with items
-    const updatedPackage = await Package.findByPk(id, {
-      include: [
-        { model: PackageItem, as: 'items' }
-      ]
-    });
-    
-    res.json(updatedPackage);
+    res.json(packageData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -172,11 +119,6 @@ export const deletePackage = async (req, res) => {
         fs.unlinkSync(imagePath);
       }
     }
-    
-    // Delete package items first
-    await PackageItem.destroy({
-      where: { package_id: id }
-    });
     
     // Delete package from database
     await packageData.destroy();

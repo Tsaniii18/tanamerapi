@@ -1,6 +1,6 @@
+// PackageModel.js
 import { DataTypes } from 'sequelize';
 import db from '../config/database.js';
-import PackageItem from './PackageItemModel.js';
 
 const Package = db.define('packages', {
   name: {
@@ -8,13 +8,6 @@ const Package = db.define('packages', {
     allowNull: false,
     validate: {
       notEmpty: true
-    }
-  },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      isIn: [['jeep', 'orange-picking']]
     }
   },
   route: {
@@ -40,9 +33,5 @@ const Package = db.define('packages', {
     }
   }
 });
-
-// Relation with PackageItem
-Package.hasMany(PackageItem, { foreignKey: 'package_id', as: 'items' });
-PackageItem.belongsTo(Package, { foreignKey: 'package_id' });
 
 export default Package;

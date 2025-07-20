@@ -341,22 +341,9 @@
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
       
-      .icon-container {
+      svg {
+        color: #708A58;
         margin-bottom: 1.5rem;
-        
-        .icon-group {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 1.5rem;
-          
-          svg {
-            color: #708A58;
-            background-color: #f8f8f8;
-            padding: 1rem;
-            border-radius: 50%;
-          }
-        }
       }
       
       h3 {
@@ -390,7 +377,6 @@
           background-color: #FFB823;
           color: #2D4F2B;
           transform: translateY(-3px);
-          box-shadow: 0 5px 15px rgba(255, 184, 35, 0.3);
         }
       }
     }

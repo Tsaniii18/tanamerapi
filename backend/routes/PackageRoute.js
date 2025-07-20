@@ -1,7 +1,7 @@
+// PackageRoute.js
 import express from 'express';
 import { 
-  getPackages, 
-  getPackagesByType,
+  getPackages,
   getPackage, 
   createPackage, 
   updatePackage, 
@@ -13,7 +13,6 @@ import { uploadImage } from '../middleware/FileUpload.js';
 const router = express.Router();
 
 router.get('/', getPackages);
-router.get('/type/:type', getPackagesByType);
 router.get('/:id', getPackage);
 router.post('/', verifyToken, uploadImage.single('image'), createPackage);
 router.put('/:id', verifyToken, uploadImage.single('image'), updatePackage);

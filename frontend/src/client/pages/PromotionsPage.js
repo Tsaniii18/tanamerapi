@@ -40,7 +40,7 @@ const PromotionsPage = () => {
         <div className="container">
           <div className="header-content">
             <div className="title-area">
-              <Ticket size={32} className="title-icon" />
+              <Ticket size={62} className="title-icon" />
               <div>
                 <h1>Promo Spesial</h1>
                 <p>Nikmati penawaran terbaik untuk pengalaman di Tanah Merapi</p>
