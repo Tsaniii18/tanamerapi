@@ -8,7 +8,7 @@ import ImageUploader from '../components/ImageUploader';
 import Loader from '../../shared/components/Loader';
 import Message from '../../shared/components/Message';
 import api from '../../utils/api';
-import { Plus, Package, MapPin, ChevronDown, X } from 'lucide-react';
+import { Plus, MapPin } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const PackagesList = () => {
@@ -26,11 +26,9 @@ const PackagesList = () => {
   // Form state
   const [formData, setFormData] = useState({
     name: '',
-    type: 'jeep',
     route: '',
     description: '',
     price: 0,
-    items: [''],
     image: null
   });
   const [formLoading, setFormLoading] = useState(false);
@@ -66,41 +64,13 @@ const PackagesList = () => {
     setPreviewImage(file);
   };
   
-  // Handle package items
-  const handleAddItem = () => {
-    setFormData(prev => ({
-      ...prev,
-      items: [...prev.items, '']
-    }));
-  };
-  
-  const handleRemoveItem = (index) => {
-    const newItems = [...formData.items];
-    newItems.splice(index, 1);
-    setFormData(prev => ({
-      ...prev,
-      items: newItems
-    }));
-  };
-  
-  const handleItemChange = (index, value) => {
-    const newItems = [...formData.items];
-    newItems[index] = value;
-    setFormData(prev => ({
-      ...prev,
-      items: newItems
-    }));
-  };
-  
   // Handle add package
   const handleAddClick = () => {
     setFormData({
       name: '',
-      type: 'jeep',
       route: '',
       description: '',
       price: 0,
-      items: [''],
       image: null
     });
     setPreviewImage(null);
@@ -113,24 +83,16 @@ const PackagesList = () => {
       return;
     }
     
-    if (formData.type === 'jeep' && !formData.route) {
-      setError('Rute harus diisi untuk paket jeep');
-      return;
-    }
-    
     try {
       setFormLoading(true);
       
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
-      formDataToSend.append('type', formData.type);
+      formDataToSend.append('type', 'jeep'); // Default to 'jeep' type
       formDataToSend.append('route', formData.route || '');
       formDataToSend.append('description', formData.description || '');
       formDataToSend.append('price', formData.price);
-      
-      // Filter out empty items
-      const filteredItems = formData.items.filter(item => item.trim() !== '');
-      formDataToSend.append('items', JSON.stringify(filteredItems));
+      formDataToSend.append('items', JSON.stringify([])); // Empty items array
       
       formDataToSend.append('image', formData.image);
       
@@ -151,16 +113,11 @@ const PackagesList = () => {
   const handleEditClick = (packageData) => {
     setCurrentPackage(packageData);
     
-    // Transform package items array
-    const packageItems = packageData.items?.map(item => item.item_name) || [''];
-    
     setFormData({
       name: packageData.name,
-      type: packageData.type,
       route: packageData.route || '',
       description: packageData.description || '',
       price: packageData.price,
-      items: packageItems.length > 0 ? packageItems : [''],
       image: null
     });
     
@@ -174,24 +131,16 @@ const PackagesList = () => {
       return;
     }
     
-    if (formData.type === 'jeep' && !formData.route) {
-      setError('Rute harus diisi untuk paket jeep');
-      return;
-    }
-    
     try {
       setFormLoading(true);
       
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
-      formDataToSend.append('type', formData.type);
+      formDataToSend.append('type', currentPackage.type); // Keep original type
       formDataToSend.append('route', formData.route || '');
       formDataToSend.append('description', formData.description || '');
       formDataToSend.append('price', formData.price);
-      
-      // Filter out empty items
-      const filteredItems = formData.items.filter(item => item.trim() !== '');
-      formDataToSend.append('items', JSON.stringify(filteredItems));
+      formDataToSend.append('items', JSON.stringify(currentPackage.items.map(item => item.item_name) || []));
       
       if (formData.image) {
         formDataToSend.append('image', formData.image);
@@ -241,11 +190,6 @@ const PackagesList = () => {
   // Table columns
   const columns = [
     {
-      key: 'id',
-      label: 'ID',
-      sortable: true
-    },
-    {
       key: 'image_url',
       label: 'Gambar',
       render: (row) => (
@@ -263,30 +207,22 @@ const PackagesList = () => {
       sortable: true
     },
     {
-      key: 'type',
-      label: 'Tipe',
-      sortable: true,
-      render: (row) => (
-        <span className={`package-type ${row.type}`}>
-          {row.type === 'jeep' ? 'Jeep' : 'Petik Jeruk'}
-        </span>
-      )
-    },
-    {
       key: 'price',
       label: 'Harga',
       sortable: true,
       render: (row) => formatCurrency(row.price)
     },
     {
-      key: 'items',
-      label: 'Isi Paket',
+      key: 'description',
+      label: 'Deskripsi',
       render: (row) => (
-        <div className="package-items">
-          {row.items && row.items.length > 0 ? (
-            <span>{row.items.length} item</span>
+        <div className="description-cell">
+          {row.description ? (
+            row.description.length > 80 
+              ? `${row.description.substring(0, 80)}...` 
+              : row.description
           ) : (
-            <span className="no-items">Tidak ada item</span>
+            <span className="no-description">Tidak ada deskripsi</span>
           )}
         </div>
       )
@@ -356,37 +292,18 @@ const PackagesList = () => {
         </div>
         
         <div className="form-group">
-          <label htmlFor="type">
-            Tipe <span className="required">*</span>
+          <label htmlFor="route">
+            Rute
           </label>
-          <select
-            id="type"
-            name="type"
-            value={formData.type}
+          <input
+            type="text"
+            id="route"
+            name="route"
+            value={formData.route}
             onChange={handleInputChange}
-            required
-          >
-            <option value="jeep">Paket Jeep</option>
-            <option value="orange-picking">Paket Petik Jeruk</option>
-          </select>
+            placeholder="Contoh: Kaliurang - Merapi - Kaliadem"
+          />
         </div>
-        
-        {formData.type === 'jeep' && (
-          <div className="form-group">
-            <label htmlFor="route">
-              Rute <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="route"
-              name="route"
-              value={formData.route}
-              onChange={handleInputChange}
-              required={formData.type === 'jeep'}
-              placeholder="Contoh: Kaliurang - Merapi - Kaliadem"
-            />
-          </div>
-        )}
         
         <div className="form-group">
           <label htmlFor="description">Deskripsi</label>
@@ -414,37 +331,6 @@ const PackagesList = () => {
             step="1000"
           />
           <p className="help-text">Harga dalam Rupiah (contoh: 350000)</p>
-        </div>
-        
-        <div className="form-group">
-          <label>
-            Isi Paket <button type="button" className="add-item-button" onClick={handleAddItem}>
-              <Plus size={14} /> Tambah Item
-            </button>
-          </label>
-          
-          <div className="package-items-container">
-            {formData.items.map((item, index) => (
-              <div key={index} className="package-item-input">
-                <input
-                  type="text"
-                  value={item}
-                  onChange={(e) => handleItemChange(index, e.target.value)}
-                  placeholder="Nama item"
-                />
-                {formData.items.length > 1 && (
-                  <button 
-                    type="button" 
-                    className="remove-item-button"
-                    onClick={() => handleRemoveItem(index)}
-                  >
-                    <X size={16} />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="help-text">Tambahkan item yang termasuk dalam paket (contoh: Driver, Jeep, Air Mineral)</p>
         </div>
         
         <ImageUploader
@@ -481,37 +367,18 @@ const PackagesList = () => {
         </div>
         
         <div className="form-group">
-          <label htmlFor="type">
-            Tipe <span className="required">*</span>
+          <label htmlFor="route">
+            Rute
           </label>
-          <select
-            id="type"
-            name="type"
-            value={formData.type}
+          <input
+            type="text"
+            id="route"
+            name="route"
+            value={formData.route}
             onChange={handleInputChange}
-            required
-          >
-            <option value="jeep">Paket Jeep</option>
-            <option value="orange-picking">Paket Petik Jeruk</option>
-          </select>
+            placeholder="Contoh: Kaliurang - Merapi - Kaliadem"
+          />
         </div>
-        
-        {formData.type === 'jeep' && (
-          <div className="form-group">
-            <label htmlFor="route">
-              Rute <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="route"
-              name="route"
-              value={formData.route}
-              onChange={handleInputChange}
-              required={formData.type === 'jeep'}
-              placeholder="Contoh: Kaliurang - Merapi - Kaliadem"
-            />
-          </div>
-        )}
         
         <div className="form-group">
           <label htmlFor="description">Deskripsi</label>
@@ -539,37 +406,6 @@ const PackagesList = () => {
             step="1000"
           />
           <p className="help-text">Harga dalam Rupiah (contoh: 350000)</p>
-        </div>
-        
-        <div className="form-group">
-          <label>
-            Isi Paket <button type="button" className="add-item-button" onClick={handleAddItem}>
-              <Plus size={14} /> Tambah Item
-            </button>
-          </label>
-          
-          <div className="package-items-container">
-            {formData.items.map((item, index) => (
-              <div key={index} className="package-item-input">
-                <input
-                  type="text"
-                  value={item}
-                  onChange={(e) => handleItemChange(index, e.target.value)}
-                  placeholder="Nama item"
-                />
-                {formData.items.length > 1 && (
-                  <button 
-                    type="button" 
-                    className="remove-item-button"
-                    onClick={() => handleRemoveItem(index)}
-                  >
-                    <X size={16} />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="help-text">Tambahkan item yang termasuk dalam paket (contoh: Driver, Jeep, Air Mineral)</p>
         </div>
         
         <ImageUploader
@@ -632,28 +468,28 @@ const PackagesList = () => {
                 </div>
               )}
               
-              <div className="info-item">
-                <h4>Deskripsi</h4>
-                <p>{currentPackage.description || 'Tidak ada deskripsi'}</p>
-              </div>
+              {currentPackage.description && (
+                <div className="info-item">
+                  <h4>Deskripsi</h4>
+                  <p>{currentPackage.description}</p>
+                </div>
+              )}
               
               <div className="info-item">
                 <h4>Harga</h4>
                 <p className="price">{formatCurrency(currentPackage.price)}</p>
               </div>
               
-              <div className="info-item">
-                <h4>Isi Paket</h4>
-                {currentPackage.items && currentPackage.items.length > 0 ? (
+              {currentPackage.items && currentPackage.items.length > 0 && (
+                <div className="info-item">
+                  <h4>Isi Paket</h4>
                   <ul className="items-list">
                     {currentPackage.items.map((item, index) => (
                       <li key={index}>{item.item_name}</li>
                     ))}
                   </ul>
-                ) : (
-                  <p className="no-items">Tidak ada item</p>
-                )}
-              </div>
+                </div>
+              )}
               
               <div className="info-item">
                 <h4>Tanggal Dibuat</h4>

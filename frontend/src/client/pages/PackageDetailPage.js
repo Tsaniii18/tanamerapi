@@ -4,7 +4,7 @@ import api from '../../utils/api';
 import './PackageDetailPage.scss';
 import Loader from '../../shared/components/Loader';
 import { formatCurrency } from '../../utils/formatCurrency';
-import { ArrowLeft, MapPin, Check, Apple } from 'lucide-react';
+import { ArrowLeft, Check, Apple } from 'lucide-react';
 
 // Custom Jeep Icon since it's not in Lucide
 const CustomJeepIcon = () => (
@@ -87,40 +87,29 @@ const PackageDetailPage = () => {
               src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${packageData.image_url}`} 
               alt={packageData.name}
             />
-            <div className="package-type">
-              {packageData.type === 'jeep' ? (
-                <>
-                  <CustomJeepIcon />
-                  <span>Jeep</span>
-                </>
-              ) : (
-                <>
-                  <Apple size={20} />
-                  <span>Petik Jeruk</span>
-                </>
-              )}
-            </div>
           </div>
           
           <div className="package-info">
             <h1>{packageData.name}</h1>
-            
-            {packageData.type === 'jeep' && packageData.route && (
-              <div className="package-route">
-                <MapPin size={20} />
-                <span>Rute: {packageData.route}</span>
-              </div>
-            )}
             
             <div className="package-price">
               <span>Harga Paket:</span>
               <div className="price">{formatCurrency(packageData.price)}</div>
             </div>
             
-            <div className="package-description">
-              <h3>Deskripsi</h3>
-              <p>{packageData.description || 'Tidak ada deskripsi untuk paket ini.'}</p>
-            </div>
+            {packageData.description && (
+              <div className="package-description">
+                <h3>Deskripsi</h3>
+                <p>{packageData.description || 'Tidak ada deskripsi untuk paket ini.'}</p>
+              </div>
+            )}
+            
+            {packageData.type === 'jeep' && packageData.route && (
+              <div className="package-route">
+                <h3>Rute</h3>
+                <p>{packageData.route}</p>
+              </div>
+            )}
             
             {packageData.items && packageData.items.length > 0 && (
               <div className="package-includes">

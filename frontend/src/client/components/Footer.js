@@ -23,7 +23,7 @@ const Footer = ({ socialMedia }) => {
         <div className="footer-content">
           <div className="footer-info">
             <h3 className="footer-title">
-              <span className="title-line">Tanah</span>
+              <span className="title-line">Tana</span>
               <span className="title-line">Merapi</span>
             </h3>
           </div>

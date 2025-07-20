@@ -9,7 +9,6 @@ import { MapPin, Search, Apple, Car } from 'lucide-react';
 const PackagesPage = () => {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   
   useEffect(() => {
@@ -28,11 +27,6 @@ const PackagesPage = () => {
   }, []);
   
   const filteredPackages = packages.filter(pkg => {
-    // Filter by tab
-    if (activeTab !== 'all' && pkg.type !== activeTab) {
-      return false;
-    }
-    
     // Filter by search
     return (
       pkg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -54,29 +48,6 @@ const PackagesPage = () => {
       <section className="section packages-section">
         <div className="container">
           <div className="filters">
-            <div className="tabs">
-              <button 
-                className={`tab ${activeTab === 'all' ? 'active' : ''}`}
-                onClick={() => setActiveTab('all')}
-              >
-                Semua Paket
-              </button>
-              <button 
-                className={`tab ${activeTab === 'jeep' ? 'active' : ''}`}
-                onClick={() => setActiveTab('jeep')}
-              >
-                <Car size={20}/>
-                Paket Jeep
-              </button>
-              <button 
-                className={`tab ${activeTab === 'orange-picking' ? 'active' : ''}`}
-                onClick={() => setActiveTab('orange-picking')}
-              >
-                <Apple size={20} />
-                Paket Petik Jeruk
-              </button>
-            </div>
-            
             <div className="search-container">
               <div className="search-input">
                 <Search size={20} />
@@ -150,26 +121,17 @@ const PackagesPage = () => {
           ) : (
             <div className="no-results">
               <div className="icon-container">
-                {activeTab === 'jeep' ? (
-                  <Car size={48}/>
-                ) : activeTab === 'orange-picking' ? (
-                  <Apple size={48} />
-                ) : (
-                  <div className="icon-group">
-                    <Car size={24}/>
-                    <Apple size={24} />
-                  </div>
-                )}
+                <div className="icon-group">
+                  <Car size={24}/>
+                  <Apple size={24} />
+                </div>
               </div>
               <h3>Paket Tidak Ditemukan</h3>
               <p>Coba kata kunci pencarian lain atau lihat semua paket kami.</p>
-              {(searchTerm || activeTab !== 'all') && (
+              {searchTerm && (
                 <button 
                   className="reset-button"
-                  onClick={() => {
-                    setSearchTerm('');
-                    setActiveTab('all');
-                  }}
+                  onClick={() => setSearchTerm('')}
                 >
                   Lihat Semua Paket
                 </button>

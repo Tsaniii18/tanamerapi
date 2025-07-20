@@ -78,17 +78,21 @@
       }
       
       .package-route {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-        color: #555;
-        font-size: 1.1rem;
-        
-        svg {
-          color: #708A58;
-        }
-      }
+  margin-bottom: 2rem;
+  
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2D4F2B;
+    margin-bottom: 0.75rem;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #555;
+  }
+}
       
       .package-price {
         margin-bottom: 2rem;
