@@ -4,7 +4,7 @@ import Slider from 'react-slick';
 import api from '../../utils/api';
 import './HomePage.scss';
 import Loader from '../../shared/components/Loader';
-import aboutImage from '../../images/about.jpg';
+import merapiImage from '../../images/merapi.jpg';
 import contohImage from '../../images/contoh.jpeg';
 import beyonceImage from '../../images/beyonce.png';
 import hissImage from '../../images/hiss.png';
@@ -186,9 +186,14 @@ const HomePage = () => {
             
             {/* Fixed CTA button and social media icons */}
             <div className="hero-fixed-content">
-              <Link to="/contact" className="cta-button">
+              <a 
+                href="https://www.google.com/maps/place/Agrowisata+Petik+Jeruk/data=!4m2!3m1!1s0x2e7a670046094faf:0x530487b6ab12895c?sa=X&ved=1t:242&ictx=111" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="cta-button"
+              >
                 Kunjungi Kami
-              </Link>
+              </a>
               <div className="hero-social-media">
                 {featuredSocialMedia.map(sm => (
                   <SocialMediaIcon
@@ -252,9 +257,14 @@ const HomePage = () => {
               
               {/* Fixed CTA button and social media icons */}
               <div className="hero-fixed-content">
-                <Link to="/contact" className="cta-button">
+                <a 
+                  href="https://www.google.com/maps/place/Agrowisata+Petik+Jeruk/data=!4m2!3m1!1s0x2e7a670046094faf:0x530487b6ab12895c?sa=X&ved=1t:242&ictx=111" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="cta-button"
+                >
                   Kunjungi Kami
-                </Link>
+                </a>
                 <div className="hero-social-media">
                   {featuredSocialMedia.map(sm => (
                     <SocialMediaIcon
@@ -276,9 +286,6 @@ const HomePage = () => {
         <div className="container">
           <h2 className="section-title">Tentang Tanah Merapi</h2>
           <div className="about-content">
-            <div className="about-image">
-              <img src={aboutImage} alt="Tanah Merapi" />
-            </div>
             <div className="about-text">
               <h3>Wisata Alam Outdoor</h3>
               <p>
@@ -289,6 +296,11 @@ const HomePage = () => {
                 Di Tanah Merapi, Anda dapat menikmati berbagai aktivitas seperti bersantap di kedai alam outdoor, 
                 petik jeruk langsung dari kebun, dan menjelajahi keindahan alam dengan jeep.
               </p>
+            </div>
+            <div className="about-image">
+              <img src={merapiImage} alt="Tanah Merapi" />
+            </div>
+            <div className="about-cta">
               <Link to="/contact" className="learn-more">
                 Pelajari Lebih Lanjut <ArrowRight size={16} />
               </Link>
@@ -414,26 +426,6 @@ const HomePage = () => {
         <div className="container">
           <h2 className="section-title">Kontak & Lokasi</h2>
           <div className="contact-content">
-            <div className="contact-info">
-              <p>
-                Jika Anda memiliki pertanyaan atau ingin melakukan reservasi, 
-                jangan ragu untuk menghubungi kami melalui salah satu platform berikut:
-              </p>
-              <div className="contact-social">
-                {socialMedia.map((social) => (
-                  <div key={social.id} className="social-contact-item">
-                    <SocialMediaIcon 
-                      platform={social.platform}
-                      url={social.url}
-                    />
-                    <span>{getSocialMediaDisplay(social.platform, social.url)}</span>
-                  </div>
-                ))}
-              </div>
-              <Link to="/contact" className="contact-button">
-                Kontak Lengkap
-              </Link>
-            </div>
             <div className="contact-map">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3800.2784519032593!2d110.4634356!3d-7.600934399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a670046094faf%3A0x530487b6ab12895c!2sAgrowisata%20Petik%20Jeruk!5e1!3m2!1sen!2sid!4v1752397056703!5m2!1sen!2sid" 
@@ -445,6 +437,15 @@ const HomePage = () => {
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Agrowisata Petik Jeruk Location"
               ></iframe>
+            </div>
+            <div className="contact-info">
+              <p>
+                Jika Anda memiliki pertanyaan atau ingin melakukan reservasi, 
+                jangan ragu untuk menghubungi kami melalui salah satu platform berikut:
+              </p>
+              <Link to="/contact" className="contact-button">
+                Informasi Lengkap <ArrowRight size={16} />
+              </Link>
             </div>
           </div>
         </div>

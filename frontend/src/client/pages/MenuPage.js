@@ -74,7 +74,6 @@ const MenuPage = () => {
                       src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${menuItem.image_url}`} 
                       alt={menuItem.name}
                     />
-                    <div className="menu-badge">Populer</div>
                   </div>
                   <div className="menu-info">
                     <h3>{menuItem.name}</h3>

@@ -42,7 +42,7 @@ const ContactPage = () => {
         <div className="container">
           <div className="header-content">
             <div className="title-area">
-              <Mail size={32} className="title-icon" />
+              <Mail size={52} className="title-icon" />
               <div>
                 <h1>Hubungi Kami</h1>
                 <p>Kami siap membantu Anda dengan informasi dan layanan terbaik</p>
@@ -73,26 +73,6 @@ const ContactPage = () => {
                 </div>
               </div>
             ))}
-            
-            <div className="contact-card">
-              <div className="icon-container">
-                <div className="social-media-link">
-                  <MapPin size={45} />
-                </div>
-              </div>
-              <div className="contact-info">
-                <h3>Lokasi</h3>
-                <p>Agrowisata Petik Jeruk, Tanah Merapi</p>
-                <a 
-                  href="https://maps.app.goo.gl/ZKLtqrCe1BLRDjYu8" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="contact-button"
-                >
-                  Petunjuk Arah
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </section>
