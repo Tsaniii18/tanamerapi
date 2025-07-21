@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import Navbar from './Navbar';
+
 import Footer from './Footer';
 import './ClientLayout.scss';
 import api from '../../utils/api';
@@ -36,7 +36,6 @@ const ClientLayout = () => {
   return (
     <div className="client-layout">
       {/* Only render the Navbar component if we're NOT on the homepage */}
-      {!isHomePage && <Navbar socialMedia={socialMedia} />}
       
       <main className="main-content">
         <Outlet context={socialMedia} />

@@ -7,7 +7,12 @@ import FormModal from '../components/FormModal';
 import Loader from '../../shared/components/Loader';
 import Message from '../../shared/components/Message';
 import api from '../../utils/api';
-import { Plus, Instagram, MessageCircle, Share2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
+
+// Import logo images
+import instagramLogo from '../../images/instagram.png';
+import whatsappLogo from '../../images/whatsapp.png';
+import tiktokLogo from '../../images/tiktok.png';
 
 const SocialMediaList = () => {
   const [socialMedia, setSocialMedia] = useState([]);
@@ -81,17 +86,13 @@ const SocialMediaList = () => {
   const renderPlatformIcon = (platform) => {
     switch (platform) {
       case 'instagram':
-        return <Instagram size={20} />;
+        return <img src={instagramLogo} alt="Instagram" className="platform-logo" />;
       case 'whatsapp':
-        return <MessageCircle size={20} />;
+        return <img src={whatsappLogo} alt="WhatsApp" className="platform-logo" />;
       case 'tiktok':
-        return (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 8V13.5C20 17.6421 16.6421 21 12.5 21C8.35786 21 5 17.6421 5 13.5C5 9.35786 8.35786 6 12.5 6V11.5C10.5 11.5 9 12.5 9 14.5C9 16.5 10.5 17.5 12.5 17.5C14.5 17.5 16 16.5 16 14.5V3H20V8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        );
+        return <img src={tiktokLogo} alt="TikTok" className="platform-logo" />;
       default:
-        return <Share2 size={20} />;
+        return <img src={instagramLogo} alt="Social Media" className="platform-logo" />;
     }
   };
   

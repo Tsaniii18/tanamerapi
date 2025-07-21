@@ -41,13 +41,12 @@ const HomePage = () => {
   // Navbar functions
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    // Prevent scrolling when sidebar is open
-    document.body.style.overflow = !isOpen ? 'hidden' : 'auto';
+    // Scroll prevention is now handled by CSS with the is-sidebar-open class
   };
   
   const closeMenu = () => {
     setIsOpen(false);
-    document.body.style.overflow = 'auto';
+    // Scroll prevention is now handled by CSS with the is-sidebar-open class
   };
   
   // Helper function to get display text for a social media platform
@@ -117,7 +116,7 @@ const HomePage = () => {
     // Cleanup
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.body.style.overflow = 'auto';
+      // Removed document.body.style.overflow = 'auto' as it's now handled by CSS
     };
   }, []);
   
@@ -211,7 +210,7 @@ const HomePage = () => {
   const featuredSocialMedia = getFeaturedSocialMedia();
   
   return (
-    <div className="home-page">
+    <div className={`home-page ${isOpen ? 'is-sidebar-open' : ''}`}>
       {/* Hero Slider with Navbar overlay */}
       <section className="hero-slider">
         {/* Navbar Component directly inside the HomePage */}

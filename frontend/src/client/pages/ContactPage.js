@@ -1,11 +1,28 @@
-import React from 'react';
-import { useOutletContext } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, NavLink, useOutletContext } from 'react-router-dom';
 import './ContactPage.scss';
 import SocialMediaIcon from '../../shared/components/SocialMediaIcon';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail, Menu } from 'lucide-react';
+import logoImage from '../../images/logo.png';
 
 const ContactPage = () => {
   const socialMedia = useOutletContext();
+  
+  // Navbar states - copied from HomePage
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const sidebarRef = useRef(null);
+  
+  // Navbar functions - copied from HomePage
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    // Scroll prevention is now handled by CSS with the is-sidebar-open class
+  };
+  
+  const closeMenu = () => {
+    setIsOpen(false);
+    // Scroll prevention is now handled by CSS with the is-sidebar-open class
+  };
   
   // Helper function to get display text for a social media platform
   const getSocialMediaDisplay = (platform, url) => {
@@ -35,8 +52,93 @@ const ContactPage = () => {
     }
   };
   
+  // Get featured social media platforms - copied from HomePage
+  const getFeaturedSocialMedia = () => {
+    return socialMedia ? socialMedia.filter(sm => 
+      ['instagram', 'tiktok', 'whatsapp'].includes(sm.platform.toLowerCase())
+    ) : [];
+  };
+  
+  // Handle scroll effect for navbar - copied from HomePage
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50); // Add background after scrolling 50px
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  
+  // Close sidebar when clicking outside - copied from HomePage
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isOpen) {
+        closeMenu();
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+  
   return (
-    <div className="contact-page">
+    <div className={`contact-page ${isOpen ? 'is-sidebar-open' : ''}`}>
+      {/* Navbar Component - copied from HomePage */}
+      <header className={`navbar contact-navbar ${isScrolled ? 'navbar-scrolled' : ''}`}>
+        <div className="container">
+          <div className="navbar-brand">
+            <Link to="/" className="logo" onClick={closeMenu}>
+              <img 
+                src={logoImage} 
+                alt="Tanah Merapi Logo" 
+                className="logo-image"
+              />
+            </Link>
+            
+            <button className="menu-button" onClick={toggleMenu} aria-label="Toggle menu">
+              <Menu size={24} />
+            </button>
+          </div>
+          
+          {/* Dark overlay for sidebar */}
+          <div 
+            className={`sidebar-overlay ${isOpen ? 'is-active' : ''}`} 
+            onClick={closeMenu}
+          ></div>
+          
+          <nav className={`navbar-menu ${isOpen ? 'is-active' : ''}`} ref={sidebarRef}>
+            <div className="sidebar-header">
+              <Link to="/" className="sidebar-logo" onClick={closeMenu}>
+                <img 
+                  src={logoImage} 
+                  alt="Tanah Merapi Logo" 
+                  className="logo-image"
+                />
+              </Link>
+            </div>
+            
+            <div className="navbar-links">
+              <NavLink to="/" onClick={closeMenu}>Home</NavLink>
+              <NavLink to="/menu" onClick={closeMenu}>Menu</NavLink>
+              <NavLink to="/packages" onClick={closeMenu}>Paket Jeep & Jeruk</NavLink>
+              <NavLink to="/promotions" onClick={closeMenu}>Promo</NavLink>
+              <NavLink to="/contact" onClick={closeMenu}>Kontak & Lokasi</NavLink>
+            </div>
+            
+            <div className="sidebar-footer">
+              <p>© 2025 Tanah Merapi</p>
+            </div>
+          </nav>
+        </div>
+      </header>
+
       {/* Enhanced Header Section */}
       <section className="contact-header">
         <div className="container">

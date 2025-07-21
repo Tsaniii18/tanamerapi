@@ -197,13 +197,17 @@
     }
     
     .content {
-      margin-left: 0;
+      margin-left: 0 !important; /* Override any other margin settings */
     }
     
     &.sidebar-open {
       .sidebar {
         transform: translateX(0);
       }
+    }
+    
+    &.sidebar-closed .sidebar {
+      transform: translateX(-100%); /* Ensure sidebar is fully hidden when closed on mobile */
     }
   }
 }

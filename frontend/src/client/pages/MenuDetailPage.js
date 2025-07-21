@@ -1,17 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, NavLink, useParams, useNavigate, useOutletContext } from 'react-router-dom';
 import api from '../../utils/api';
 import './MenuDetailPage.scss';
 import Loader from '../../shared/components/Loader';
 import { formatCurrency } from '../../utils/formatCurrency';
-import { ArrowLeft, Coffee } from 'lucide-react';
+import { ArrowLeft, Coffee, Menu } from 'lucide-react';
+import SocialMediaIcon from '../../shared/components/SocialMediaIcon';
+import logoImage from '../../images/logo.png';
 
 const MenuDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const socialMedia = useOutletContext();
   const [menuItem, setMenuItem] = useState(null);
   const [relatedItems, setRelatedItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Navbar states - copied from HomePage
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const sidebarRef = useRef(null);
+  
+  // Navbar functions - copied from HomePage
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    // Scroll prevention is now handled by CSS with the is-sidebar-open class
+  };
+  
+  const closeMenu = () => {
+    setIsOpen(false);
+    // Scroll prevention is now handled by CSS with the is-sidebar-open class
+  };
+  
+  // Helper function to get display text for a social media platform - copied from HomePage
+  const getSocialMediaDisplay = (platform, url) => {
+    switch(platform.toLowerCase()) {
+      case 'instagram':
+        const igMatch = url.match(/instagram\.com\/([^\/\?]+)/);
+        return igMatch ? `@${igMatch[1]}` : url;
+      case 'tiktok':
+        const ttMatch = url.match(/tiktok\.com\/@?([^\/\?]+)/);
+        return ttMatch ? `@${ttMatch[1]}` : url;
+      case 'whatsapp':
+        const waMatch = url.match(/wa\.me\/(\d+)/);
+        if (waMatch) {
+          const phone = waMatch[1];
+          if (phone.startsWith('62')) {
+            return `+${phone.slice(0, 2)} ${phone.slice(2, 5)}-${phone.slice(5, 9)}-${phone.slice(9)}`;
+          }
+          return `+${phone}`;
+        }
+        return url;
+      default:
+        return url;
+    }
+  };
+  
+  // Get featured social media platforms - copied from HomePage
+  const getFeaturedSocialMedia = () => {
+    return socialMedia ? socialMedia.filter(sm => 
+      ['instagram', 'tiktok', 'whatsapp'].includes(sm.platform.toLowerCase())
+    ) : [];
+  };
   
   useEffect(() => {
     const fetchData = async () => {
@@ -43,13 +93,91 @@ const MenuDetailPage = () => {
     fetchData();
   }, [id, navigate]);
   
+  // Handle scroll effect for navbar - copied from HomePage
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50); // Add background after scrolling 50px
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  
+  // Close sidebar when clicking outside - copied from HomePage
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isOpen) {
+        closeMenu();
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+  
   if (loading) {
     return <Loader />;
   }
   
   if (!menuItem) {
     return (
-      <div className="not-found-container">
+      <div className={`not-found-container ${isOpen ? 'is-sidebar-open' : ''}`}>
+        {/* Navbar Component - copied from HomePage */}
+        <header className={`navbar menu-detail-navbar ${isScrolled ? 'navbar-scrolled' : ''}`}>
+          <div className="container">
+            <div className="navbar-brand">
+              <Link to="/" className="logo" onClick={closeMenu}>
+                <img 
+                  src={logoImage} 
+                  alt="Tanah Merapi Logo" 
+                  className="logo-image"
+                />
+              </Link>
+              
+              <button className="menu-button" onClick={toggleMenu} aria-label="Toggle menu">
+                <Menu size={24} />
+              </button>
+            </div>
+            
+            {/* Dark overlay for sidebar */}
+            <div 
+              className={`sidebar-overlay ${isOpen ? 'is-active' : ''}`} 
+              onClick={closeMenu}
+            ></div>
+            
+            <nav className={`navbar-menu ${isOpen ? 'is-active' : ''}`} ref={sidebarRef}>
+              <div className="sidebar-header">
+                <Link to="/" className="sidebar-logo" onClick={closeMenu}>
+                  <img 
+                    src={logoImage} 
+                    alt="Tanah Merapi Logo" 
+                    className="logo-image"
+                  />
+                </Link>
+              </div>
+              
+              <div className="navbar-links">
+                <NavLink to="/" onClick={closeMenu}>Home</NavLink>
+                <NavLink to="/menu" onClick={closeMenu}>Menu</NavLink>
+                <NavLink to="/packages" onClick={closeMenu}>Paket Jeep & Jeruk</NavLink>
+                <NavLink to="/promotions" onClick={closeMenu}>Promo</NavLink>
+                <NavLink to="/contact" onClick={closeMenu}>Kontak & Lokasi</NavLink>
+              </div>
+              
+              <div className="sidebar-footer">
+                <p>© 2025 Tanah Merapi</p>
+              </div>
+            </nav>
+          </div>
+        </header>
+        
         <Coffee size={48} />
         <h2>Menu tidak ditemukan</h2>
         <p>Menu yang Anda cari tidak tersedia.</p>
@@ -61,7 +189,56 @@ const MenuDetailPage = () => {
   }
   
   return (
-    <div className="menu-detail-page">
+    <div className={`menu-detail-page ${isOpen ? 'is-sidebar-open' : ''}`}>
+      {/* Navbar Component - copied from HomePage */}
+      <header className={`navbar menu-detail-navbar ${isScrolled ? 'navbar-scrolled' : ''}`}>
+        <div className="container">
+          <div className="navbar-brand">
+            <Link to="/" className="logo" onClick={closeMenu}>
+              <img 
+                src={logoImage} 
+                alt="Tanah Merapi Logo" 
+                className="logo-image"
+              />
+            </Link>
+            
+            <button className="menu-button" onClick={toggleMenu} aria-label="Toggle menu">
+              <Menu size={24} />
+            </button>
+          </div>
+          
+          {/* Dark overlay for sidebar */}
+          <div 
+            className={`sidebar-overlay ${isOpen ? 'is-active' : ''}`} 
+            onClick={closeMenu}
+          ></div>
+          
+          <nav className={`navbar-menu ${isOpen ? 'is-active' : ''}`} ref={sidebarRef}>
+            <div className="sidebar-header">
+              <Link to="/" className="sidebar-logo" onClick={closeMenu}>
+                <img 
+                  src={logoImage} 
+                  alt="Tanah Merapi Logo" 
+                  className="logo-image"
+                />
+              </Link>
+            </div>
+            
+            <div className="navbar-links">
+              <NavLink to="/" onClick={closeMenu}>Home</NavLink>
+              <NavLink to="/menu" onClick={closeMenu}>Menu</NavLink>
+              <NavLink to="/packages" onClick={closeMenu}>Paket Jeep & Jeruk</NavLink>
+              <NavLink to="/promotions" onClick={closeMenu}>Promo</NavLink>
+              <NavLink to="/contact" onClick={closeMenu}>Kontak & Lokasi</NavLink>
+            </div>
+            
+            <div className="sidebar-footer">
+              <p>© 2025 Tanah Merapi</p>
+            </div>
+          </nav>
+        </div>
+      </header>
+
       <div className="container">
         <div className="breadcrumb">
           <Link to="/menu">

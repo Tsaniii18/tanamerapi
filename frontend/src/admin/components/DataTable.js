@@ -113,7 +113,7 @@ const DataTable = ({
           <tbody>
             {isLoading ? (
               <tr className="loading-row">
-                <td colSpan={columns.length + (actionColumn ? 1 : 0)}>
+                <td id={columns.length + (actionColumn ? 1 : 0)}>
                   <div className="loading-message">Loading data...</div>
                 </td>
               </tr>

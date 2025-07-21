@@ -1,5 +1,34 @@
 // HomePage.scss with integrated Navbar styles
 .home-page {
+  // Style for when sidebar is open - add to the component root
+  &.is-sidebar-open {
+    // Prevent scrolling when sidebar is open
+    overflow: hidden;
+    height: 100vh;
+    
+    // When sidebar is active, darken the navbar too
+    .navbar:not(.navbar-scrolled) {
+      &.homepage-navbar {
+        background-color: rgba(0, 0, 0, 0.5); // Add dark background to transparent navbar
+        backdrop-filter: blur(5px); // Optional: adds a nice blur effect
+      }
+    }
+    
+    // Dim all content behind the sidebar
+    .hero-slider::after,
+    .section::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 85; // Below the overlay but above content
+      pointer-events: none; // Allow clicks to pass through
+    }
+  }
+
   // Navbar styles directly within HomePage
   .navbar {
     position: absolute; // Change from fixed to absolute for proper overlay
@@ -752,11 +781,11 @@
         font-size: 1.1rem;
         line-height: 1.7;
         color: #555;
-        text-align: justify;
+        text-align: center; // Changed from justify to center
         max-width: 100%;
         
         @media (max-width: 768px) {
-          text-align: left;
+          text-align: center; // Changed from left to center
         }
       }
     }
