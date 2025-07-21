@@ -7,6 +7,7 @@ import MenuDetailPage from './pages/MenuDetailPage';
 import PackagesPage from './pages/PackagesPage';
 import PackageDetailPage from './pages/PackageDetailPage';
 import PromotionsPage from './pages/PromotionsPage';
+import PromotionDetailPage from './pages/PromotionDetailPage'; // Import the new component
 import ContactPage from './pages/ContactPage';
 
 const ClientRoutes = () => {
@@ -19,6 +20,7 @@ const ClientRoutes = () => {
         <Route path="packages" element={<PackagesPage />} />
         <Route path="packages/:id" element={<PackageDetailPage />} />
         <Route path="promotions" element={<PromotionsPage />} />
+        <Route path="promotions/:id" element={<PromotionDetailPage />} /> {/* Add this new route */}
         <Route path="contact" element={<ContactPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

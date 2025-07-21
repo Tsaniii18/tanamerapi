@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useOutletContext } from 'react-router-dom';
+import { Link, NavLink, useOutletContext, useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
 import './PromotionsPage.scss';
 import Loader from '../../shared/components/Loader';
-import { formatCurrency, formatDate } from '../../utils/formatCurrency';
+import { formatDate } from '../../utils/formatCurrency';
 import { Tag, Percent, Calendar, AlertCircle, Ticket, Menu } from 'lucide-react';
-import SocialMediaIcon from '../../shared/components/SocialMediaIcon';
 import logoImage from '../../images/logo.png';
 
 const PromotionsPage = () => {
   const socialMedia = useOutletContext();
   const [promotions, setPromotions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   
   // Navbar states - copied from HomePage
   const [isOpen, setIsOpen] = useState(false);
@@ -21,43 +21,15 @@ const PromotionsPage = () => {
   // Navbar functions - copied from HomePage
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    // Scroll prevention is now handled by CSS with the is-sidebar-open class
   };
   
   const closeMenu = () => {
     setIsOpen(false);
-    // Scroll prevention is now handled by CSS with the is-sidebar-open class
   };
   
-  // Helper function to get display text for a social media platform - copied from HomePage
-  const getSocialMediaDisplay = (platform, url) => {
-    switch(platform.toLowerCase()) {
-      case 'instagram':
-        const igMatch = url.match(/instagram\.com\/([^\/\?]+)/);
-        return igMatch ? `@${igMatch[1]}` : url;
-      case 'tiktok':
-        const ttMatch = url.match(/tiktok\.com\/@?([^\/\?]+)/);
-        return ttMatch ? `@${ttMatch[1]}` : url;
-      case 'whatsapp':
-        const waMatch = url.match(/wa\.me\/(\d+)/);
-        if (waMatch) {
-          const phone = waMatch[1];
-          if (phone.startsWith('62')) {
-            return `+${phone.slice(0, 2)} ${phone.slice(2, 5)}-${phone.slice(5, 9)}-${phone.slice(9)}`;
-          }
-          return `+${phone}`;
-        }
-        return url;
-      default:
-        return url;
-    }
-  };
-  
-  // Get featured social media platforms - copied from HomePage
-  const getFeaturedSocialMedia = () => {
-    return socialMedia ? socialMedia.filter(sm => 
-      ['instagram', 'tiktok', 'whatsapp'].includes(sm.platform.toLowerCase())
-    ) : [];
+  // Navigate to promotion detail page
+  const handleViewPromotion = (promotionId) => {
+    navigate(`/promotions/${promotionId}`);
   };
   
   useEffect(() => {
@@ -192,7 +164,7 @@ const PromotionsPage = () => {
         </div>
       </section>
       
-      {/* Promotions Section */}
+      {/* Promotions Section - Simplified */}
       <section className="section promotions-section">
         <div className="container">
           {loading ? (
@@ -201,158 +173,62 @@ const PromotionsPage = () => {
             <div className="promotions-grid">
               {promotions.map((promotion) => (
                 <div key={promotion.id} className="promotion-card">
-                  {promotion.image_url ? (
-                    <div className="promotion-with-image">
-                      <div className="promotion-image">
-                        <img 
-                          src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${promotion.image_url}`} 
-                          alt={promotion.title}
-                        />
-                        <div className="discount-badge">
-                          <Percent size={16} />
-                          <span>{promotion.discount_percent}% OFF</span>
-                        </div>
+                  {/* Add image section */}
+                  {promotion.image_url && (
+                    <div className="promotion-card-image">
+                      <img 
+                        src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${promotion.image_url}`} 
+                        alt={promotion.title}
+                      />
+                      <div className="discount-badge">
+                        <Percent size={16} />
+                        <span>{promotion.discount_percent}% OFF</span>
                       </div>
-                      
-                      <div className="promotion-info">
-                        <div className="promotion-header">
-                          <h3>{promotion.title}</h3>
-                          <div className="validity-indicator">
-                            <Calendar size={14} />
-                            <span>
-                              Berakhir {formatDate(promotion.valid_until)}
-                            </span>
-                          </div>
-                        </div>
-                        
-                        <p>{promotion.description}</p>
-                        
-                        <div className="promotion-validity">
-                          <Calendar size={16} />
-                          <span>
-                            Berlaku: {formatDate(promotion.valid_from)} - {formatDate(promotion.valid_until)}
-                          </span>
-                        </div>
-                        
-                        {promotion.packages && promotion.packages.length > 0 && (
-                          <div className="promotion-packages">
-                            <Tag size={16} />
-                            <span>
-                              Berlaku untuk {promotion.packages.length} paket
-                            </span>
-                          </div>
-                        )}
-                        
-                        <div className="promotion-details">
-                          <h4>Syarat dan Ketentuan:</h4>
-                          <p>{promotion.terms || 'Tidak ada syarat khusus.'}</p>
-                        </div>
-                        
-                        <div className="packages-list">
-                          <h4>Paket yang Tersedia:</h4>
-                          {promotion.packages && promotion.packages.length > 0 ? (
-                            <ul>
-                              {promotion.packages.map((pkg) => (
-                                <li key={pkg.id}>
-                                  <Link to={`/packages/${pkg.id}`}>
-                                    {pkg.name}
-                                  </Link>
-                                  <div className="price-comparison">
-                                    <span className="original-price">
-                                      {formatCurrency(pkg.price)}
-                                    </span>
-                                    <span className="discounted-price">
-                                      {formatCurrency(pkg.price - (pkg.price * promotion.discount_percent / 100))}
-                                    </span>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="no-packages">Tidak ada paket yang tersedia.</p>
-                          )}
-                        </div>
-                        
-                        <a 
-                          href={`https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20promo%20${promotion.title}.%20Bisakah%20saya%20mendapatkan%20informasi%20lebih%20lanjut?`} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="book-button"
-                        >
-                          Pesan Sekarang
-                        </a>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="promotion-without-image">
-                      <div className="promotion-header">
-                        <h3>{promotion.title}</h3>
-                        <div className="discount-badge">
-                          <Percent size={16} />
-                          <span>{promotion.discount_percent}% OFF</span>
-                        </div>
-                      </div>
-                      
-                      <p>{promotion.description}</p>
-                      
-                      <div className="promotion-details">
-                        <div className="promotion-validity">
-                          <Calendar size={16} />
-                          <span>
-                            Berlaku: {formatDate(promotion.valid_from)} - {formatDate(promotion.valid_until)}
-                          </span>
-                        </div>
-                        
-                        {promotion.packages && promotion.packages.length > 0 && (
-                          <div className="promotion-packages">
-                            <Tag size={16} />
-                            <span>
-                              Berlaku untuk {promotion.packages.length} paket
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="promotion-terms">
-                        <h4>Syarat dan Ketentuan:</h4>
-                        <p>{promotion.terms || 'Tidak ada syarat khusus.'}</p>
-                      </div>
-                      
-                      <div className="packages-list">
-                        <h4>Paket yang Tersedia:</h4>
-                        {promotion.packages && promotion.packages.length > 0 ? (
-                          <ul>
-                            {promotion.packages.map((pkg) => (
-                              <li key={pkg.id}>
-                                <Link to={`/packages/${pkg.id}`}>
-                                  {pkg.name}
-                                </Link>
-                                <div className="price-comparison">
-                                  <span className="original-price">
-                                    {formatCurrency(pkg.price)}
-                                  </span>
-                                  <span className="discounted-price">
-                                    {formatCurrency(pkg.price - (pkg.price * promotion.discount_percent / 100))}
-                                  </span>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="no-packages">Tidak ada paket yang tersedia.</p>
-                        )}
-                      </div>
-                      
-                      <a 
-                        href={`https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20promo%20${promotion.title}.%20Bisakah%20saya%20mendapatkan%20informasi%20lebih%20lanjut?`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="book-button"
-                      >
-                        Pesan Sekarang
-                      </a>
                     </div>
                   )}
+                  
+                  <div className="promotion-card-content">
+                    {/* Card Header with Discount Badge - moved badge to image if available */}
+                    <div className="promotion-card-header">
+                      <h3>{promotion.title}</h3>
+                      {!promotion.image_url && (
+                        <div className="discount-badge">
+                          <Percent size={16} />
+                          <span>{promotion.discount_percent}% OFF</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Expiry Date */}
+                    <div className="promotion-expiry">
+                      <Calendar size={16} />
+                      <span>Berakhir {formatDate(promotion.valid_until)}</span>
+                    </div>
+                    
+                    {/* Available Packages */}
+                    <div className="promotion-packages-section">
+                      <h4>Paket yang Tersedia:</h4>
+                      {promotion.packages && promotion.packages.length > 0 ? (
+                        <ul className="packages-preview">
+                          {promotion.packages.map((pkg) => (
+                            <li key={pkg.id}>
+                              <span>{pkg.name}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="no-packages">Tidak ada paket yang tersedia.</p>
+                      )}
+                    </div>
+                    
+                    {/* Action Button - Changed to "Lihat Syarat dan Ketentuan" */}
+                    <button 
+                      className="view-details-button"
+                      onClick={() => handleViewPromotion(promotion.id)}
+                    >
+                      Lihat Syarat dan Ketentuan
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
