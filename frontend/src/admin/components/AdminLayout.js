@@ -1,3 +1,4 @@
+// AdminLayout.js
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { 
@@ -9,7 +10,8 @@ import {
   Coffee, 
   Package, 
   Tag, 
-  Share2 
+  Share2,
+  Settings 
 } from 'lucide-react';
 import './AdminLayout.scss';
 import api from '../../utils/api';
@@ -80,6 +82,12 @@ const AdminLayout = () => {
               </Link>
             </li>
             <li>
+              <Link to="/admin/site-settings" className={isActive('/site-settings')}>
+                <Settings size={20} />
+                <span>Pengaturan Beranda</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/admin/slides" className={isActive('/slides')}>
                 <Image size={20} />
                 <span>Slides</span>
@@ -128,6 +136,7 @@ const AdminLayout = () => {
           
           <h2 className="page-title">
             {location.pathname === '/admin' && 'Dashboard'}
+            {location.pathname === '/admin/site-settings' && 'Pengaturan Beranda'}
             {location.pathname === '/admin/slides' && 'Kelola Slides'}
             {location.pathname === '/admin/menu-items' && 'Kelola Menu'}
             {location.pathname === '/admin/packages' && 'Kelola Paket'}

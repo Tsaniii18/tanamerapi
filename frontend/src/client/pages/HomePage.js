@@ -1,3 +1,4 @@
+// HomePage.js
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useOutletContext } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -19,6 +20,10 @@ const HomePage = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [packages, setPackages] = useState([]);
   const [promotions, setPromotions] = useState([]);
+  const [siteSettings, setSiteSettings] = useState({
+    home_description: '',
+    home_image: ''
+  });
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -83,17 +88,35 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [slidesRes, menuItemsRes, packagesRes, promotionsRes] = await Promise.all([
+        const [
+          slidesRes, 
+          menuItemsRes, 
+          packagesRes, 
+          promotionsRes, 
+          siteSettingsRes
+        ] = await Promise.all([
           api.get('/slides'),
           api.get('/menu-items'),
           api.get('/packages'),
-          api.get('/promotions')
+          api.get('/promotions'),
+          api.get('/site-settings')
         ]);
         
         setSlides(slidesRes.data);
         setMenuItems(menuItemsRes.data.slice(0, 3)); // Just get first 3
         setPackages(packagesRes.data.slice(0, 3)); // Just get first 3
         setPromotions(promotionsRes.data);
+        
+        // Process site settings
+        const settingsObj = {};
+        siteSettingsRes.data.forEach(setting => {
+          settingsObj[setting.key] = setting.value;
+        });
+        
+        setSiteSettings({
+          home_description: settingsObj.home_description || '',
+          home_image: settingsObj.home_image || ''
+        });
       } catch (error) {
         console.error('Failed to fetch data:', error);
       } finally {
@@ -384,17 +407,19 @@ const HomePage = () => {
           <div className="about-content">
             <div className="about-text">
               <h3>Wisata Alam Outdoor</h3>
-              <p>
-                Tanah Merapi adalah destinasi wisata alam outdoor yang terletak di lereng Gunung Merapi, Yogyakarta. 
-                Kami menawarkan pengalaman wisata yang unik dengan pemandangan yang indah dan udara yang segar.
+              <p className="preserve-line-breaks">
+                {siteSettings.home_description || 
+                  'Tanah Merapi adalah destinasi wisata alam outdoor yang terletak di lereng Gunung Merapi, Yogyakarta. Kami menawarkan pengalaman wisata yang unik dengan pemandangan yang indah dan udara yang segar.'}
               </p>
-              <p>
-                Di Tanah Merapi, Anda dapat menikmati berbagai aktivitas seperti bersantap di kedai alam outdoor, 
-                petik jeruk langsung dari kebun, dan menjelajahi keindahan alam dengan jeep.
-              </p>
+              {/* Removed the hardcoded paragraph */}
             </div>
             <div className="about-image">
-              <img src={merapiImage} alt="Tanah Merapi" />
+              <img 
+                src={siteSettings.home_image 
+                  ? `${process.env.REACT_APP_API_URL?.replace('/api', '')}${siteSettings.home_image}` 
+                  : merapiImage} 
+                alt="Tanah Merapi" 
+              />
             </div>
             <div className="about-cta">
               <Link to="/contact" className="learn-more">
@@ -408,7 +433,7 @@ const HomePage = () => {
       {/* Menu Preview Section */}
       <section className="section menu-preview-section">
         <div className="container">
-          <h2 className="section-title">Menu Pilihan</h2>
+          <h2 className="section-title">Menu Makanan dan Minuman</h2>
           <div className="menu-cards">
             {menuItems.map((menuItem) => (
               <div key={menuItem.id} className="menu-card">

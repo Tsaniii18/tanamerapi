@@ -784,6 +784,10 @@
         text-align: center; // Changed from justify to center
         max-width: 100%;
         
+        &.preserve-line-breaks {
+          white-space: pre-wrap; // Preserves line breaks and wraps text
+        }
+        
         @media (max-width: 768px) {
           text-align: center; // Changed from left to center
         }

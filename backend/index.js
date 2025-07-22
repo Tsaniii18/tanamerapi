@@ -1,3 +1,4 @@
+// index.js (updated with new import and route)
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -11,6 +12,7 @@ import PromotionRoute from './routes/PromotionRoute.js';
 import PromotionPackageRoute from './routes/PromotionPackageRoute.js';
 import SocialMediaRoute from './routes/SocialMediaRoute.js';
 import FileUploadRoute from './routes/FileUploadRoute.js';
+import SiteSettingRoute from './routes/SiteSettingRoute.js';
 import initPromotionScheduler from './utils/PromotionScheduler.js';
 
 dotenv.config();
@@ -36,6 +38,7 @@ app.use('/api/promotions', PromotionRoute);
 app.use('/api/promotion-packages', PromotionPackageRoute);
 app.use('/api/social-media', SocialMediaRoute);
 app.use('/api/upload', FileUploadRoute);
+app.use('/api/site-settings', SiteSettingRoute);
 
 // Database connection and server start
 (async () => {

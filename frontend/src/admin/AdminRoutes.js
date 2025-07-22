@@ -1,8 +1,10 @@
+// AdminRoutes.js
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import AdminLayout from './components/AdminLayout';
 import Dashboard from './pages/Dashboard';
+import SiteSettingsPage from './pages/SiteSettingsPage';
 import SlidesList from './pages/SlidesList';
 import MenuItemsList from './pages/MenuItemsList';
 import PackagesList from './pages/PackagesList';
@@ -24,6 +26,7 @@ const AdminRoutes = () => {
         }
       >
         <Route index element={<Dashboard />} />
+        <Route path="site-settings" element={<SiteSettingsPage />} />
         <Route path="slides" element={<SlidesList />} />
         <Route path="menu-items" element={<MenuItemsList />} />
         <Route path="packages" element={<PackagesList />} />

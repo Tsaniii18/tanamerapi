@@ -8,7 +8,8 @@ import {
   Coffee, 
   Package, 
   Tag, 
-  Share2
+  Share2,
+  Settings
 } from 'lucide-react';
 import Loader from '../../shared/components/Loader';
 
@@ -72,6 +73,19 @@ const Dashboard = () => {
       </div>
       
       <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon">
+            <Settings size={28} />
+          </div>
+          <div className="stat-info">
+            <h3>Pengaturan Beranda</h3>
+            <p>Edit Konten</p>
+          </div>
+          <Link to="/admin/site-settings" className="stat-action">
+            Kelola Beranda
+          </Link>
+        </div>
+        
         <div className="stat-card">
           <div className="stat-icon">
             <Image size={28} />
